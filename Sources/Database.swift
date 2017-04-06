@@ -10,13 +10,16 @@ import Foundation
 import SwiftKueryPostgreSQL
 import SwiftKuery
 
-struct DatabaseConfig {
+
+
+struct Database {
     
-    var host : String = "127.0.0.1"
-    var port : Int = 5432
-    var databaseName : String = "postgres"
-    var userName : String = "postgres"
-    var password : String = ""
+    private var host : String = "127.0.0.1"
+    private var port : Int = 5432
+    private var databaseName : String = "postgres"
+    private var userName : String = "postgres"
+    private var password : String = ""
+    public var connection:PostgreSQLConnection
     
     init(host : String = "127.0.0.1",port : Int = 5432,databaseName : String = "postgres",userName : String = "postgres",password : String = ""){
         self.host = host
@@ -24,52 +27,47 @@ struct DatabaseConfig {
         self.databaseName = databaseName
         self.userName = userName
         self.password = password
-    }
-    
-    // TODO: Init with file
-    
-    // Map config to match SwiftKuery model
-    func connection() -> PostgreSQLConnection {
+        
+        /// Map config to match SwiftKuery model
         var options = [ConnectionOptions]()
         options.append(.databaseName(self.databaseName))
         options.append(.password(self.password))
         options.append(.userName(self.userName))
-        return PostgreSQLConnection(host: self.host, port: Int32(self.port) , options: options)
+        connection = PostgreSQLConnection(host: self.host, port: Int32(self.port) , options: options)
     }
-}
-
-
-
-extension PostgreSQLConnection {
     
     /**
-     Simple function to send a query 
-     
-     
-     */
-    public func sendQuery(query:Query, completionHandler: (Any, Error) -> ()) throws {
-            let string = try query.build(queryBuilder:queryBuilder)
-            sendQuery(query: string)
-    }
+     Static function that give you a database instance with connection based on your environnement variables.
     
-    public func sendQuery(query:String){
-        self.connect() { error in
-            if let error = error {
-                print("We get an error trying to connect your database : \(error)")
-            } else {
-                self.execute(query){ result in
-                    switch result {
-                    case .successNoData:
-                        break
-                    case .error:
-                        print("Can't prepare database correctly \(result)")
-                        break
-                    default:
-                        break
-                    }
-                    self.closeConnection()
-                }
-            }
+     - Authors: Loic LE PENN
+     
+     - Important: This function required to have
+        DATABASE_HOST,
+        DATABASE_PORT,
+        DATABASE_USERNAME,
+        DATABASE_DB 
+        and DATABASE_PASSWORD environnement variables set or it will throw
+     
+     - throws: QueryError.connection
+     
+     - important: This is static method so you should use it on Database type and not instance.
+     
+     - Version: 1.0
+     */
+    static func environmentDatabase() throws -> Database {
+        if let host = ProcessInfo.processInfo.environment["DATABASE_HOST"],
+            let port_string = ProcessInfo.processInfo.environment["DATABASE_PORT"],
+            let port = Int(port_string),
+            let userName = ProcessInfo.processInfo.environment["DATABASE_USERNAME"],
+            let database = ProcessInfo.processInfo.environment["DATABASE_DB"],
+            let password = ProcessInfo.processInfo.environment["DATABASE_PASSWORD"]
+        {
+            return Database(host: host, port: port, databaseName: database, userName: userName, password: password)
+        } else {
+            throw QueryError.connection("Database informations are not complete to connect to database or are not pass as environnement variable")
         }
     }
 }
+
+
+
