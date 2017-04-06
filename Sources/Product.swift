@@ -8,34 +8,45 @@
 
 import Kitura
 import HeliumLogger
+import LoggerAPI
 import SwiftKueryPostgreSQL
 import SwiftKuery
 import Foundation
 
 class Product : Table {
     
-    let tableName = "product"
+    let tableName = "products"
     let refProduct = Column("refProduct")
     let name = Column("name")
     let currency = Column("currency")
     let picture = Column("picture")
-    let priceHT = Column("priceHT")
+    let priceHT = Column("priceWT")
     let creationDate = Column("creationDate")
-    let tva = Column("tva")
+    let tva = Column("vat")
     
     static func prepare(connection:PostgreSQLConnection){
         
-        let string = "CREATE TABLE  IF NOT EXISTS products ( "
-            + "refProduct varchar(255) PRIMARY KEY NOT NULL,"
-            + "picture  varchar(255),"
-            + "name   varchar(255),"
-            + "tva decimal,"
-            + "currency  varchar(255),"
-            + "priceHT  decimal,"
-            + "creationDate TIMESTAMP WITH TIME ZONE"
-            + ");"
+     var query:CreateTable = CreateTable(tableName: "products")
+         query.addColumn("refProduct", type: .varchar(number: 255), notNull: true, primaryKey: true)
+         query.addColumn("picture", type: .varchar(number: 255))
+         query.addColumn("name", type: .varchar(number: 255))
+         query.addColumn("vat", type: .decimal)
+         query.addColumn("currency", type: .varchar(number: 255))
+         query.addColumn("priceWT", type: .decimal)
+         query.addColumn("creationDate", type: .timestamp)
         
-        connection.sendQuery(query: string)
+        do {
+            try db.connection.sendQuery(query: query) { result , error in
+                if let error = error {
+                    Log.error(String(describing: error))
+                }
+                if result != nil {
+                    Log.info("Table prepare with Success")
+                }
+            }
+        } catch {
+            Log.error(String(describing: error))
+        }
     }
 
 }
