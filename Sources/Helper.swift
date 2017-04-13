@@ -9,7 +9,7 @@
 import Foundation
 import LoggerAPI
 import HeliumLogger
-import SwiftyJSON
+import SwiftKuery
 
 /**
  
@@ -64,40 +64,34 @@ func generateRef(size:Int, prefix:String = "", suffix:String = "") -> String {
 
 
 
-/**
- 
- Enum to handle api error
- 
- - Author: Loic LE PENN
 
- - Version: 1.0
- */
 
-enum ErrorHandler : Error, CustomStringConvertible {
+
+extension ResultSet {
     
-    case WrongType()
-    case EmptyBody()
-    case MissingRequireProperty(String)
-    case UnknowError()
-    case DatabaseError(String)
-    
-    var description: String {
-        switch self {
-        case .WrongType:
-            return "Body need to be in JSON. Check that header contains Content-type: application/json"
-        case .EmptyBody:
-            return "Empty body are not accepted"
-        case .MissingRequireProperty(let property):
-            return "Missing require Property \(property)"
-        case .UnknowError:
-            return "Unknown Error"
-        case .DatabaseError(let error):
-            return "Database error: \(error)"
+    func uniqueSingleRow() throws -> [String:Any?]? {
+        var mainRow:[String:Any?]? = nil
+        for item in self.rows {
+            if mainRow == nil {
+                mainRow = [String:Any?]()
+                for (index,value) in item.enumerated() {
+                    mainRow?[self.titles[index]] = value ?? nil
+                }
+            } else {
+                throw ErrorHandler.UnexpectedDataStructure
+            }
+        }
+        return mainRow
+    }
+
+    func asDictionaries() -> [[String:Any?]] {
+        return self.rows.map { row in
+            var object = [String:Any?]()
+            
+            for (index,value) in row.enumerated() {
+                object[self.titles[index]] = value ?? nil
+            }
+            return object
         }
     }
-    
-    func toJSON() -> JSON {
-        return JSON(["error":self.description])
-    }
-    
 }
