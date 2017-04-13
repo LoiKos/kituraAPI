@@ -19,6 +19,7 @@ struct Database {
     private var databaseName : String = "postgres"
     private var userName : String = "postgres"
     private var password : String = ""
+    
     public var connection:PostgreSQLConnection
     
     init(host : String = "127.0.0.1",port : Int = 5432,databaseName : String = "postgres",userName : String = "postgres",password : String = ""){
@@ -67,6 +68,47 @@ struct Database {
             throw QueryError.connection("Database informations are not complete to connect to database or are not pass as environnement variable")
         }
     }
+    
+    func executeQuery(query: Query, oncompletion: @escaping (QueryResult) -> ()) {
+        
+        self.connection.connect() { error in
+            
+            if let error = error {
+                oncompletion(QueryResult.error(error))
+            
+            } else {
+                self.connection.execute(query: query) { result in
+                    
+                    defer {
+                        self.connection.closeConnection()
+                    }
+                    
+                    oncompletion(result)
+                }
+            }
+        }
+    }
+    
+    func executeQuery(query: String, oncompletion: @escaping (QueryResult) -> ()) {
+        
+        self.connection.connect() { error in
+            
+            if let error = error {
+                oncompletion(QueryResult.error(error))
+                
+            } else {
+                self.connection.execute(query) { result in
+                    
+                    defer {
+                        self.connection.closeConnection()
+                    }
+                    
+                    oncompletion(result)
+                }
+            }
+        }
+    }
+
 }
 
 
