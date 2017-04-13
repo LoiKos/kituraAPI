@@ -8,30 +8,48 @@
 
 import Foundation
 import Kitura
-import SwiftKueryPostgreSQL
 import SwiftyJSON
+import SwiftKuery
+import LoggerAPI
 
-func routingCenter(connection:PostgreSQLConnection) -> Router {
+func routingCenter(database: Database) -> Router {
     
     let router = Router()
     
-    router.all("/", middleware: BodyParser())
+    router.all("*", middleware: BodyParser()) // Parse incoming request body
     
     router.get("/"){ request, response,_ in
         try response.send(status: .notFound).end()
     }
     
-    router.get("/api/v1/status"){ request, response,_ in
-        let json = JSON(
-            [
-                "name":"MBAO API",
-                "version":"v1.0",
-                "status":"available"
-            ])
-        try response.send(json: json).end()
+    let storeRouter = StoreRouter(database: database).router
+    router.all("/api/v1/stores", middleware: storeRouter)
+    
+    let productRouter = ProductRouter(database: database).router
+    router.all("/api/v1/products", middleware: productRouter)
+    
+    return router
+}
+
+
+func handleCompletion(result:[String : Any?]?, error:Error?, response: RouterResponse, next: @escaping () -> Void){
+    guard error == nil else {
+        Log.error("\(error.debugDescription)")
+        response.error = error
+        next()
+        return
     }
     
-    router.all("/api/v1/stores", middleware: storeRoutes(connection: connection))
-
-    return router
+    guard let responseBody = result else {
+        Log.error("Impossible to retrieve results")
+        response.error = ErrorHandler.UnknowError
+        next()
+        return
+    }
+    
+    do{
+        try response.send(json: responseBody).end()
+    } catch {
+        Log.error("Impossible to send response : \(error)")
+    }
 }
