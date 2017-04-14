@@ -39,7 +39,10 @@ class StoreService {
         if let merchantKey = body["merchantKey"].string {
              tuples.append((store.merchantKey, merchantKey))
         }
-        
+        if let currency = body["currency"].string {
+            tuples.append((store.currency, currency))
+        }
+
         guard body.count == tuples.count else {
             throw ErrorHandler.WrongParameter
         }
@@ -170,6 +173,10 @@ class StoreService {
         }
         if let merchantKey = jsonBody["merchantKey"].string {
             updatedValue.append((store.merchantKey,merchantKey))
+        }
+        
+        if let currency = jsonBody["currency"].string {
+            updatedValue.append((store.currency, currency))
         }
         
         if !updatedValue.isEmpty {

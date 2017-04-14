@@ -22,25 +22,16 @@ class ProductService {
     }
     
     func create(body:JSON, oncompletion: @escaping ([String : Any?]?, Error?) -> ()) throws {
-        
         guard let name = body["name"].string else {
             throw ErrorHandler.MissingRequireProperty("name")
         }
+        
         var tuples : [(Column,Any)] = [(Column,Any)]()
         
         tuples.append((product.name,name))
         
         if let picture = body["picture"].string {
             tuples.append((product.picture, picture))
-        }
-        if let currency = body["currency"].string {
-            tuples.append((product.currency, currency))
-        }
-        if let vat = body["vat"].string {
-            tuples.append((product.vat, vat))
-        }
-        if let priceHT = body["priceHT"].string {
-            tuples.append((product.priceHT, priceHT))
         }
         
         guard body.count == tuples.count else {
@@ -160,25 +151,19 @@ class ProductService {
     }
     
     func updateById(id: String, jsonBody: JSON, oncompletion: @escaping ([String:Any?]?,Error?) -> ()) throws {
-      /*  var updatedValue : [(Column,Any)] = [(Column,Any)]()
+        var updatedValue : [(Column,Any)] = [(Column,Any)]()
         
         if let name = jsonBody["name"].string {
             updatedValue.append((product.name,name))
         }
-        if let picture = jsonBody["picture"].string {
-            updatedValue.append((product.picture,picture))
-        }
         
-        if let vat = jsonBody["vat"].float {
-            updatedValue.append((product.vat,vat))
-        }
-        if let merchantKey = jsonBody["merchantKey"].string {
-            updatedValue.append((product.merchantKey,merchantKey))
+        if let picture = jsonBody["picture"].string {
+            updatedValue.append((product.picture, picture))
         }
         
         if !updatedValue.isEmpty {
             if jsonBody.count == updatedValue.count {
-                let query : Update = Update(product, set: updatedValue).where(product.refproduct == id).suffix("RETURNING *")
+                let query : Update = Update(product, set: updatedValue).where(product.refProduct == id).suffix("RETURNING *")
                 
                 db.executeQuery(query: query){ result in
                     
@@ -201,12 +186,11 @@ class ProductService {
             }
         } else {
             throw ErrorHandler.NothingToUpdate
-        }*/
+        }
     }
     
     func deleteById(id:String, oncompletion: @escaping ([String:Any?]?,Error?) -> ()){
-      /*
-        let delete = Delete(from: product).where(product.refproduct == id).suffix("RETURNING *")
+        let delete = Delete(from: product).where(product.refProduct == id).suffix("RETURNING *")
         
         db.executeQuery(query: delete){ queryResult in
             switch(queryResult){
@@ -224,7 +208,7 @@ class ProductService {
             case .successNoData:
                 oncompletion(nil,ErrorHandler.NothingFoundFor("id : \(id)"))
             }
-        } */
+        }
     }
     
     private func count(oncompletion: @escaping ([String:Any?]?,Error?) -> ()){
