@@ -21,18 +21,27 @@ class Stock : Table {
     let creationDate = Column("creationDate")
     let lastUpdate = Column("lastUpdate")
     let status = Column("status")
+    let priceHT = Column("priceHT")
+    let vat = Column("vat")
     
-    
-//    static func prepare(connection:PostgreSQLConnection){
-//        let query : String = "CREATE TABLE IF NOT EXISTS stock ( refStore varchar(255) NOT NULL REFERENCES stores, refProduct varchar(255) NOT NULL REFERENCES products, quantity integer, creationDate timestamp, lastUpdate timestamp, status varchar(45), PRIMARY KEY (refStore,refProduct) );"
-//        
-//       db.connection.executeQuery(query: query) { result in
-//            if let error = result?.asError {
-//                Log.error(String(describing: error))
-//            } else {
-//                Log.info("Table prepare with Success")
-//            }
-//        }
-//    }
+    static func prepare(){
+        let query : String = "CREATE TABLE IF NOT EXISTS stock ( refStore varchar(255) NOT NULL REFERENCES stores,"
+                           + "refProduct varchar(255) NOT NULL REFERENCES products,"
+                           + "quantity integer,"
+                           + "creationDate timestamp,"
+                           + "lastUpdate timestamp,"
+                           + "status varchar(45),"
+                           + "priceHT decimal,"
+                           + "vat decimal,"
+                           + "PRIMARY KEY (refStore,refProduct) );"
+        
+       db.executeQuery(query: query) { result in
+            if let error = result.asError {
+                Log.error(String(describing: error))
+            } else {
+                Log.info("Table prepare with Success")
+            }
+        }
+    }
 }
 

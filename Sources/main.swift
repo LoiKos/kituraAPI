@@ -1,8 +1,6 @@
 import Kitura
 import HeliumLogger
 import LoggerAPI
-import SwiftKuery
-import SwiftKueryPostgreSQL
 import Foundation
 
 // First set Logger to
@@ -13,9 +11,9 @@ Log.logger = logger
 // connect to database
 let db = try Database.environmentDatabase()
 
-//Store.prepare(connection: db.connection)
-//Product.prepare(connection: db.connection)
-//Stock.prepare(connection: db.connection)
+Store.prepare()
+Product.prepare()
+Stock.prepare()
 
 let router = routingCenter(database: db)
 
