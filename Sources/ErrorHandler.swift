@@ -32,6 +32,7 @@ enum ErrorHandler : Error, CustomStringConvertible {
     case ParsingResponse
     case NothingFoundFor(String)
     case UnexpectedDataStructure
+    case badRequest
     
     var description: String {
         switch self {
@@ -64,6 +65,9 @@ enum ErrorHandler : Error, CustomStringConvertible {
         
         case .UnexpectedDataStructure:
             return "Unknown Data Structure"
+            
+        case .badRequest:
+            return "Request is not conform to API specifications"
         }
     }
     
@@ -93,7 +97,7 @@ public func handleError(request: RouterRequest, response: RouterResponse, next: 
     if let error = (response.error) as? ErrorHandler {
         errorDescription = error.toJSON()
         switch error {
-        case .EmptyBody,.MissingRequireProperty,.WrongType,.WrongParameter,.NothingToUpdate:
+        case .EmptyBody,.MissingRequireProperty,.WrongType,.WrongParameter,.NothingToUpdate,.badRequest:
             response.status(.badRequest)
         case .NothingFoundFor:
             response.status(.notFound)
@@ -106,7 +110,7 @@ public func handleError(request: RouterRequest, response: RouterResponse, next: 
     }
     
     do {
-        Log.error("Error in STORE ROUTER : \(errorDescription["error"].stringValue)")
+        Log.error("Error : \(errorDescription["error"].stringValue)")
         try response.send(json:errorDescription).end()
     } catch {
         Log.error("[ERROR HANDLER FAILURE] : \(error)")
