@@ -22,6 +22,9 @@ func routingCenter(database: Database) -> Router {
         try response.send(status: .notFound).end()
     }
     
+    let stockRouter = StockRouter(database: database).router
+    router.all("/api/v1/stores/:storeId/products", middleware: stockRouter)
+    
     let storeRouter = StoreRouter(database: database).router
     router.all("/api/v1/stores", middleware: storeRouter)
     
