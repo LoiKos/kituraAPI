@@ -56,7 +56,12 @@ func generateRef(size:Int, prefix:String = "", suffix:String = "") -> String {
     var c = charSet.characters.map{ String($0) }
     var reference = prefix
     for _ in 0...(size - 1) {
-        reference.append(c[Int(arc4random_uniform(UInt32(c.count)))])
+        #if os(Linux)
+            srandom(UInt32(time(nil)))
+            reference.append(c[Int(UInt32(random() % c.count))])
+        #else
+            reference.append(c[Int(arc4random_uniform(UInt32(c.count)))])
+        #endif
     }
     reference.append(suffix)
     return reference
