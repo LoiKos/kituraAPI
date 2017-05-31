@@ -75,7 +75,7 @@ struct Database {
             
             if let error = error {
                 oncompletion(QueryResult.error(error))
-            
+                self.connection.closeConnection()
             } else {
                 self.connection.execute(query: query) { result in
                     
@@ -95,7 +95,7 @@ struct Database {
             
             if let error = error {
                 oncompletion(QueryResult.error(error))
-                
+                 self.connection.closeConnection()
             } else {
                 self.connection.execute(query) { result in
                     
