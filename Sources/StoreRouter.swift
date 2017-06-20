@@ -15,9 +15,9 @@ import SwiftyJSON
 
 
 public class StoreRouter {
-    
+
     let service : StoreService
-    
+
     public let router: Router
 
     init(database: Database){
@@ -25,7 +25,7 @@ public class StoreRouter {
         router = Router()
         setupRoutes()
     }
-    
+
     private func setupRoutes(){
         router.get("/:id", handler : getStoreById )
         router.patch("/:id", handler : updateStoreById )
@@ -34,7 +34,7 @@ public class StoreRouter {
         router.post("/", handler : createStore )
         router.error(handleError)
     }
-    
+
     private func getStoreById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         if let id = request.parameters["id"] {
             service.findById(id: id) { result, error in
@@ -45,13 +45,13 @@ public class StoreRouter {
             throw ErrorHandler.MissingRequireProperty("id")
         }
     }
-    
+
     private func updateStoreById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         if let id = request.parameters["id"] {
             guard let parsedBody = request.body else {
                 throw ErrorHandler.EmptyBody
             }
-            
+
             switch parsedBody {
                 case .json(let jsonBody):
                     try service.updateById(id: id, jsonBody: jsonBody) { result, error in
@@ -65,7 +65,7 @@ public class StoreRouter {
             throw ErrorHandler.MissingRequireProperty("id")
         }
     }
-    
+
     private func deleteStoreById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         if let id = request.parameters["id"] {
             service.deleteById(id: id) { result, error in
@@ -76,32 +76,33 @@ public class StoreRouter {
             throw ErrorHandler.MissingRequireProperty("id")
         }
     }
-    
+
     private func getStores(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         Log.info("Trying recover query paramers offset and limit")
-        
+
         var limit:Int = 0
         var offset:Int = 0
-        
+
         if let paramOffset = request.queryParameters["offset"] {
             offset = Int(paramOffset) ?? 0
         }
         if let paramLimit = request.queryParameters["limit"] {
             limit = Int(paramLimit) ?? 0
         }
-        
+
         try service.findAll(limit: limit, offset: offset) { result, error in
             response.status(.OK)
+            print(result)
             handleCompletion(result: result, error: error, response: response, next: next)
         }
     }
-    
+
     private func createStore(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
-        
+
         guard let parsedBody = request.body else {
             throw ErrorHandler.EmptyBody
         }
-        
+
         switch parsedBody {
             case .json(let jsonBody):
                 try service.create(body: jsonBody) { result, error in

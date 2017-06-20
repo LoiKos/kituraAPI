@@ -10,7 +10,9 @@ import Foundation
 import LoggerAPI
 import HeliumLogger
 import SwiftKuery
-
+#if os(Linux)
+  import Glibc
+#endif
 /**
 
  Generate a reference to register for example products. the reference is created from a set of 36 characters and contains at least 15 characters.
@@ -31,8 +33,7 @@ func generateRef(prefix:String = "", suffix:String = "") -> String {
     var reference = prefix
     for _ in 0...14 {
       #if os(Linux)
-          srandom(UInt32(time(nil)))
-          reference.append(c[Int(UInt32(random() % c.count))])
+          reference.append(c[random() % c.count])
       #else
           reference.append(c[Int(arc4random_uniform(UInt32(c.count)))])
       #endif
@@ -61,12 +62,11 @@ func generateRef(size:Int, prefix:String = "", suffix:String = "") -> String {
     var c = charSet.characters.map{ String($0) }
     var reference = prefix
     for _ in 0...(size - 1) {
-        #if os(Linux)
-            srandom(UInt32(time(nil)))
-            reference.append(c[Int(UInt32(random() % c.count))])
-        #else
-            reference.append(c[Int(arc4random_uniform(UInt32(c.count)))])
-        #endif
+      #if os(Linux)
+          reference.append(c[random() % c.count])
+      #else
+          reference.append(c[Int(arc4random_uniform(UInt32(c.count)))])
+      #endif
     }
     reference.append(suffix)
     return reference
