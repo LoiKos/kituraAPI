@@ -7,6 +7,8 @@
    [Products](#Products)
   
    [Stock](#Stock)
+   
+### [Code Coverage](#Cov)
 
 ### [Task Flow](#Tasks)
 
@@ -70,6 +72,8 @@ Sample Call:
 Notes:
 
 <This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here.>
+
+# <a name="Cov"></a> Code Coverage
 
 # <a name="Tasks"></a> Task Flow
 - [x] database connection
