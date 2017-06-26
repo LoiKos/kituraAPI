@@ -7,100 +7,42 @@
 //
 
 import Foundation
-import LoggerAPI
-import HeliumLogger
 import SwiftKuery
+
 #if os(Linux)
   import Glibc
 #endif
-/**
-
- Generate a reference to register for example products. the reference is created from a set of 36 characters and contains at least 15 characters.
-
- - Author: Loic LE PENN
-
- - returns : return the reference as a String
-
- - parameters:
-    - prefix : if you need to a custom prefix to the reference
-    - suffix : This is useful in some case to add suffix to reference
-
- - Version: 1.0
- */
-func generateRef(prefix:String = "", suffix:String = "") -> String {
-    let charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    var c = charSet.characters.map{ String($0) }
-    var reference = prefix
-    for _ in 0...14 {
-      #if os(Linux)
-          reference.append(c[random() % c.count])
-      #else
-          reference.append(c[Int(arc4random_uniform(UInt32(c.count)))])
-      #endif
-    }
-    reference.append(suffix)
-    return reference
-}
-
-/**
-
- Generate a reference to register for example products. the reference is created from a set of 36 characters and contains at least 15 characters.
-
- - Author: Loic LE PENN
-
- - returns : return the reference as a String
-
- - parameters:
-    - size : size of the generated references
-    - prefix : if you need to a custom prefix to the reference
-    - suffix : This is useful in some case to add suffix to reference
-
- - Version: 1.0
- */
-func generateRef(size:Int, prefix:String = "", suffix:String = "") -> String {
-    let charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    var c = charSet.characters.map{ String($0) }
-    var reference = prefix
-    for _ in 0...(size - 1) {
-      #if os(Linux)
-          reference.append(c[random() % c.count])
-      #else
-          reference.append(c[Int(arc4random_uniform(UInt32(c.count)))])
-      #endif
-    }
-    reference.append(suffix)
-    return reference
-}
-
-
-
-
-
 
 extension ResultSet {
-
-    func uniqueSingleRow() throws -> [String:Any?]? {
-        var mainRow:[String:Any?]? = nil
+    /**
+        Retrieve a single row from a Query result (Swift-Kuery) ResultSet
+     */
+    func singleRow() throws -> Dictionary<String,Any> {
+        var mainRow:Dictionary<String,Any> = Dictionary<String,Any>()
+        
         for item in self.rows {
-            if mainRow == nil {
-                mainRow = [String:Any?]()
-                for (index,value) in item.enumerated() {
-                    mainRow?[self.titles[index]] = value ?? nil
-                }
-            } else {
-                throw ErrorHandler.UnexpectedDataStructure
+            if !mainRow.isEmpty { throw ErrorHandler.NothingFound }
+            mainRow = Dictionary<String,Any>()
+            for (index,value) in item.enumerated() {
+                mainRow[self.titles[index]] = value ?? ""
             }
         }
+        
+        if mainRow.isEmpty {throw ErrorHandler.NothingFound }
         return mainRow
     }
-
-    func asDictionaries() -> [[String:Any?]] {
+    
+    /**
+     
+     */
+    func asDictionaries() -> [ Dictionary<String,Any> ] {
         return self.rows.map { row in
-            var object = [String:Any?]()
-
+            var object = Dictionary<String,Any>()
+            
             for (index,value) in row.enumerated() {
-                object[self.titles[index]] = value ?? nil
+                object[self.titles[index]] = value ?? ""
             }
+            
             return object
         }
     }
