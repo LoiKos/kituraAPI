@@ -1,16 +1,25 @@
-[Overview](#Overview) 
+## [Overview](#Overview) 
 
-[Doc](#Doc) 
+## [Doc](#Doc)
 
-[Task Flow](#Tasks)
+  ### [Stores](#Stores)
+
+  ### [Products](#Products)
+  
+  ### [Stock](#Stock)
+
+## [Task Flow](#Tasks)
 
 # <a name="Overview"></a> Overview
 
 
 # <a name="Doc"></a> Api Documentation
 
-
 <Additional information about your API call. Try to use verbs that match both request type (fetching vs modifying) and plurality (one vs multiple).>
+
+# <a name="Stores"></a> Stores
+# <a name="Products"></a> Products
+# <a name="Stock"></a> Stock
 
 URL
 
