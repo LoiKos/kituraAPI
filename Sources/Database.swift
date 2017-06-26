@@ -59,7 +59,7 @@ struct Database {
         if let host = ProcessInfo.processInfo.environment["DATABASE_HOST"],
             let port_string = ProcessInfo.processInfo.environment["DATABASE_PORT"],
             let port = Int(port_string),
-            let userName = ProcessInfo.processInfo.environment["DATABASE_USERNAME"],
+            let userName = ProcessInfo.processInfo.environment["DATABASE_USER"],
             let database = ProcessInfo.processInfo.environment["DATABASE_DB"],
             let password = ProcessInfo.processInfo.environment["DATABASE_PASSWORD"]
         {

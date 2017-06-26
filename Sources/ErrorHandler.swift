@@ -31,6 +31,7 @@ enum ErrorHandler : Error, CustomStringConvertible {
     case DatabaseError(String)
     case ParsingResponse
     case NothingFoundFor(String)
+    case NothingFound
     case UnexpectedDataStructure
     case badRequest
     
@@ -62,6 +63,9 @@ enum ErrorHandler : Error, CustomStringConvertible {
             
         case .NothingFoundFor(let str):
             return "No object matched \(str)"
+        
+        case .NothingFound:
+            return "Nothing match in the database"
         
         case .UnexpectedDataStructure:
             return "Unknown Data Structure"
@@ -99,7 +103,7 @@ public func handleError(request: RouterRequest, response: RouterResponse, next: 
         switch error {
         case .EmptyBody,.MissingRequireProperty,.WrongType,.WrongParameter,.NothingToUpdate,.badRequest:
             response.status(.badRequest)
-        case .NothingFoundFor:
+        case .NothingFoundFor,.NothingFound:
             response.status(.notFound)
         default:
             response.status(.internalServerError)
