@@ -14,18 +14,15 @@
 <Additional information about your API call. Try to use verbs that match both request type (fetching vs modifying) and plurality (one vs multiple).>
 
 # <a name="Stores"></a> Stores
-# <a name="Products"></a> Products
-# <a name="Stock"></a> Stock
 
-URL
+URL : ` api/v1/stores `
 
-<The URL Structure (path only, no root url)>
+Method: 
+<div style="background-color:rgb(63, 127, 191);">
+      <p>GET</p>
+</div> 
 
-Method:
-
-<The request type>
-
-GET | POST | DELETE | PUT
+| POST | DELETE | PUT
 
 URL Params
 
@@ -66,6 +63,11 @@ Sample Call:
 Notes:
 
 <This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here.>
+
+# <a name="Products"></a> Products
+# <a name="Stock"></a> Stock
+
+
 
 # <a name="Docker"></a> Work with Docker
 
