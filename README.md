@@ -1,14 +1,14 @@
-## [Overview](#Overview) 
+### [Overview](#Overview) 
 
-## [Doc](#Doc)
+### [Doc](#Doc)
 
-  ### [Stores](#Stores)
+   [Stores](#Stores)
 
-  ### [Products](#Products)
+   [Products](#Products)
   
-  ### [Stock](#Stock)
+   [Stock](#Stock)
 
-## [Task Flow](#Tasks)
+### [Task Flow](#Tasks)
 
 # <a name="Overview"></a> Overview
 
