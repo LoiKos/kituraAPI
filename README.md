@@ -1,4 +1,4 @@
-## [Overview](#Overview)  |  [Doc](#Doc)  |  [Code Coverage](#Cov)  |  [Task Flow](#Tasks) 
+## [Overview](#Overview)  |  [Doc](#Doc)  |  [Code Coverage](#Cov)  |  [Docker](#Docker) |  [Task Flow](#Tasks) 
 
    [Stores](#Stores)
 
@@ -6,10 +6,6 @@
   
    [Stock](#Stock)
    
-
-
-
-
 # <a name="Overview"></a> Overview
 
 
@@ -71,13 +67,20 @@ Notes:
 
 <This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here.>
 
+# <a name="Docker"></a> Work with Docker
+
+*Coming Soon* 
+
 # <a name="Cov"></a> Code Coverage
+
+*Coming Soon* 
 
 # <a name="Tasks"></a> Task Flow
 - [x] database connection
 - [x] Stores routes
 - [x] Products routes 
 - [x] Stock routes 
+- [ ] Docker
 - [ ] Linux compatibility 
 - [ ] API docs
 - [ ] Unit tests 
