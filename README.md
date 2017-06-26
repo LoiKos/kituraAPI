@@ -1,7 +1,4 @@
-### [Overview](#Overview) 
-### [Doc](#Doc)
-### [Code Coverage](#Cov)
-### [Task Flow](#Tasks)
+## [Overview](#Overview)  |  [Doc](#Doc)  |  [Code Coverage](#Cov)  |  [Task Flow](#Tasks) 
 
    [Stores](#Stores)
 
