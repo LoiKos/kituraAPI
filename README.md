@@ -1,6 +1,7 @@
 ### [Overview](#Overview) 
-
 ### [Doc](#Doc)
+### [Code Coverage](#Cov)
+### [Task Flow](#Tasks)
 
    [Stores](#Stores)
 
@@ -8,9 +9,9 @@
   
    [Stock](#Stock)
    
-### [Code Coverage](#Cov)
 
-### [Task Flow](#Tasks)
+
+
 
 # <a name="Overview"></a> Overview
 
