@@ -27,11 +27,24 @@ public class StockRouter {
     }
     
     private func setupRoutes(){
+        router.get("/:productId",handler: getStoreProductsById)
         router.patch("/:productId", handler: updateStoreProductById)
         router.delete("/:productId", handler: deleteStoreProductById)
         router.get("/", handler: getStoreProducts)
         router.post("/", handler: createStoreProduct)
         router.error(handleError)
+    }
+    
+    
+    private func getStoreProductsById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
+        guard let store = request.parameters["storeId"],
+            let product = request.parameters["productId"] else {
+                throw ErrorHandler.badRequest
+        }
+        
+        service.getProductInStock(storeId: store, productId: product, completionHandler: { result, error in
+            handleCompletion(result: result, error: error, response: response, next: next)
+        })
     }
     
     private func updateStoreProductById(request:RouterRequest, response: RouterResponse, next : @escaping () -> Void ) throws {

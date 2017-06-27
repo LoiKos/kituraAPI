@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Dispatch
 import Kitura
 import LoggerAPI
 import SwiftKuery
@@ -19,94 +20,94 @@ class StockService {
     let store = Store()
     
     let db : Database
+    let ref : Reference
     
     init(database:Database){
         self.db = database
+        self.ref = Reference.sharedInstance
     }
     
     
-    func updateProductInStock (storeId: String, productId: String, body: JSON, completionHandler: @escaping ([String:Any?]?,Error?) -> ()){
+    func updateProductInStock (storeId: String, productId: String, body: JSON, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()){
+        guard !body.isEmpty else {
+            completionHandler(nil, ErrorHandler.EmptyBody)
+            return
+        }
+        
+        var (productJson, stockJson) = self.prepare(json: body, required: false)
+        
+        if productJson.count + stockJson.count == body.count {
             
-            var (productJson, stockJson) = self.prepare(json: body, required: false)
+            let connection = self.db.connection as Connection
             
-            if productJson.count + stockJson.count == body.count {
-                
-                var productUpdate : Update? = nil
-                var stockUpdate : Update? = nil
-                
-                if !productJson.isEmpty {
-                    productUpdate = Update(product, set: productJson).suffix("Returning *")
+            connection.connect(){ error in
+                guard error == nil else {
+                    completionHandler(nil,error)
+                    return
                 }
                 
-                if !stockJson.isEmpty {
-                    stockJson.append((stock.lastUpdate,Date()))
-                    stockUpdate = Update(stock, set: stockJson).suffix("Returning *")
-                }
-                
-                if let productUpdate = productUpdate {
-                    db.executeQuery(query: productUpdate){ result in
-                        if let error = result.asError{
-                            completionHandler(nil, error)
-                        } else if let productSet = result.asResultSet {
-                            if let stockUpdate = stockUpdate {
-                                self.db.executeQuery(query: stockUpdate){ result in
-                                    if let error = result.asError{
-                                        completionHandler(nil, error)
-                                    } else if let stockSet = result.asResultSet {
-                                        do {
-                                            if let stockDict = try stockSet.uniqueSingleRow(),
-                                                let productDict = try productSet.uniqueSingleRow(){
-                                                
-                                                var returnValue = [String:Any?]()
-                                                for (key,value) in stockDict {
-                                                    returnValue[key] = value
-                                                }
-                                                for (key,value) in productDict {
-                                                    returnValue[key] = value
-                                                }
-                                                completionHandler(returnValue,nil)
-                                            }
-                                        } catch {
-                                            completionHandler(nil,error)
-                                        }
-                                    } else {
-                                        completionHandler(nil,ErrorHandler.UnexpectedDataStructure)
+                connection.startTransaction() { result in
+                    let group = DispatchGroup()
+                    let queue = DispatchQueue(label:"update",attributes: .concurrent)
+                    var errorG : ErrorHandler? = nil
+                    
+                    queue.async(group: group) {
+                        if !productJson.isEmpty {
+                            let productUpdate : Update = Update(self.product, set: productJson).where("products.refproduct = '\(productId)'").suffix("Returning *")
+                            connection.execute(query: productUpdate){ result in
+                                if let error = result.asError {
+                                    errorG = ErrorHandler.DatabaseError(error.localizedDescription)
+                                }
+                            }
+                        }
+                    }
+                    
+                    queue.async(group: group) {
+                        if !stockJson.isEmpty {
+                            stockJson.append((self.stock.lastUpdate,Date()))
+                            let stockUpdate : Update = Update(self.stock, set: stockJson).where("stock.refproduct = '\(productId)' and stock.refstore = '\(storeId)'").suffix("Returning *")
+                            connection.execute(query: stockUpdate){ result in
+                                if let error = result.asError {
+                                    errorG = ErrorHandler.DatabaseError(error.localizedDescription)
+                                }
+                            }
+                        }
+                    }
+                    
+                    group.notify(queue: queue) {
+                        if let errorG = errorG {
+                                connection.rollback(){ rollbackStatus in
+                                completionHandler(nil, ErrorHandler.DatabaseError(errorG.localizedDescription))
+                            }
+                            connection.closeConnection()
+                        }
+                        else {
+                            connection.commit(){ result in
+                                guard result.success else {
+                                    connection.rollback(){ rollbackStatus in
+                                        completionHandler(nil, ErrorHandler.DatabaseError("Impossible to commit"))
                                     }
+                                    connection.closeConnection()
+                                    return
                                 }
-                            } else {
-                                do {
-                                    let productDict = try productSet.uniqueSingleRow()
-                                    completionHandler(productDict,nil)
-                                } catch {
-                                    completionHandler(nil,error)
+                                connection.closeConnection()
+                                self.getProductInStock(storeId: storeId, productId: productId){ dictionary, error in
+                                    completionHandler(dictionary, error)
                                 }
-                            }
-                        } else {
-                            completionHandler(nil,ErrorHandler.UnexpectedDataStructure)
-                        }
-                    }
-                } else {
-                    if let stockUpdate = stockUpdate {
-                        db.executeQuery(query: stockUpdate){ result in
-                            if let error = result.asError{
-                                completionHandler(nil, error)
-                            } else if let stockSet = result.asResultSet {
-                                do {
-                                    let stockDict = try stockSet.uniqueSingleRow()
-                                    completionHandler(stockDict,nil)
-                                } catch {
-                                    completionHandler(nil,error)
-                                }
-                            } else {
-                                completionHandler(nil,ErrorHandler.UnexpectedDataStructure)
+                                
                             }
                         }
                     }
+                    
                 }
+            }
+        } else {
+            Log.error("Bad parameters")
+            completionHandler(nil, ErrorHandler.badRequest)
         }
     }
     
-    func deleteProductInStock (storeId: String, productId: String, completionHandler: @escaping ([String:Any?]?,Error?) -> ()) {
+    func deleteProductInStock (storeId: String, productId: String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) {
         
         let connection = self.db.connection as Connection
         
@@ -123,7 +124,7 @@ class StockService {
             connection.startTransaction(){ result in
                 let deleteS = Delete(from: self.stock, where: self.stock.refStore == storeId && self.stock.refProduct == productId).suffix("RETURNING *")
                 
-                var dict = [String:Any?]()
+                var dict = Dictionary<String,Any>()
                 connection.execute(query: deleteS){ result in
                     guard result.success else {
                         connection.rollback(){ rollbackStatus in
@@ -132,14 +133,13 @@ class StockService {
                         }
                         return
                     }
-
+                    
                     if let result = result.asResultSet{
-                        var stockDict = [String:Any]()
+                        var stockDict = Dictionary<String,Any>()
                         
                         do {
-                            if let singleRow = try result.uniqueSingleRow() {
-                                stockDict = singleRow
-                            }
+                            let singleRow = try result.singleRow()
+                            stockDict = singleRow
                         } catch {
                             completionHandler(nil,error)
                         }
@@ -157,11 +157,10 @@ class StockService {
                             }
                             
                             if let result = deletedResult.asResultSet{
-                                var productDict =  [String:Any]()
+                                var productDict =  Dictionary<String,Any>()
                                 do {
-                                    if let singleRow = try result.uniqueSingleRow() {
-                                        productDict = singleRow
-                                    }
+                                    let singleRow = try result.singleRow()
+                                    productDict = singleRow
                                 } catch {
                                     completionHandler(nil,error)
                                 }
@@ -176,11 +175,11 @@ class StockService {
                                     }
                                     
                                     for (key,value) in stockDict{
-                                       dict[key] = value
+                                        dict[key] = value
                                     }
                                     
                                     for (key,value) in productDict {
-                                        dict[key] = value
+                                        dict["product_\(key)"] = value
                                     }
                                     
                                     completionHandler(dict,nil)
@@ -194,7 +193,7 @@ class StockService {
                         }
                     } else {
                         connection.rollback(){ rollbackStatus in
-                             Log.error("Impossible to handle database response- ROLLBACK")
+                            Log.error("Impossible to handle database response- ROLLBACK")
                             completionHandler(nil,  ErrorHandler.NothingFoundFor(""))
                         }
                     }
@@ -203,7 +202,7 @@ class StockService {
         }
     }
     
-    func createProductInStock (storeId: String, requestBody: JSON, completionHandler: @escaping ([String:Any?]?,Error?) -> ()) {
+    func createProductInStock (storeId: String, requestBody: JSON, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) {
         checkIfExist(id: storeId, table: store, column: store.refStore ){ exist in
             if exist {
                 var (productJson, stockJson) = self.prepare(json: requestBody)
@@ -217,11 +216,11 @@ class StockService {
                 
                 connection.startTransaction(){ result in
                     
-                    let productReference = generateRef()
+                    let productReference = self.ref.generateRef()
                     productJson.append((self.product.refProduct, productReference))
                     productJson.append((self.product.creationDate,Date()))
                     
-                    let insertP =  Insert(into: self.product, valueTuples: productJson)
+                    let insertP =  Insert(into: self.product, valueTuples: productJson).suffix("RETURNING *")
                     
                     connection.execute(query: insertP){ result in
                         guard result.success else {
@@ -231,6 +230,15 @@ class StockService {
                             }
                             return
                         }
+                        
+                        var result_product : Dictionary<String,Any>? = nil
+                        
+                        do {
+                            result_product = try result.asResultSet?.singleRow()
+                        } catch {
+                            completionHandler(nil, error)
+                        }
+                        
                         stockJson.append((self.stock.refStore, storeId))
                         stockJson.append((self.stock.refProduct, productReference))
                         stockJson.append((self.stock.creationDate, Date()))
@@ -252,7 +260,15 @@ class StockService {
                             connection.commit(){ result in
                                 if result.success{
                                     do {
-                                        try completionHandler(resultSet?.uniqueSingleRow(),nil)
+                                        if var result_data = try resultSet?.singleRow(),
+                                            let dict_product = result_product {
+                                            for data in dict_product.enumerated() {
+                                                result_data["product_\(data.element.key)"] = data.element.value
+                                            }
+                                            completionHandler(result_data,nil)
+                                        } else {
+                                            completionHandler(nil, ErrorHandler.UnknowError)
+                                        }
                                     } catch {
                                         completionHandler(nil, ErrorHandler.ParsingResponse)
                                     }
@@ -274,20 +290,20 @@ class StockService {
     }
     
     
-    func getProductInStock(limit:Int = 0, offset:Int = 0, storeId: String, completionHandler: @escaping ([String:Any?]?,Error?) -> ()) {
+    func getProductInStock(limit:Int = 0, offset:Int = 0, storeId: String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) {
         checkIfExist(id: storeId, table: store, column: store.refStore ){ exist in
             if exist {
                 let count = "select count(*) from stock where stock.refStore = '\(storeId)'"
                 
                 self.db.executeQuery(query: count){ result in
-            
                     do {
-                        var count = [String:Any?]()
-                        if let countResponse = try result.asResultSet?.uniqueSingleRow(),
-                           let countString = countResponse["count"] as? String,
-                           let countInt = Int(countString) {
-                                count["Total"] = countInt
+                        var count = Dictionary<String,Any>()
+                        if let countResponse = try result.asResultSet?.singleRow(),
+                            let countInt = countResponse["count"] as? Int64
+                        {
+                            count["Total"] = Int(countInt)
                         } else {
+                            Log.error("failed to retrieve count")
                             throw ErrorHandler.UnexpectedDataStructure
                         }
                         
@@ -308,8 +324,8 @@ class StockService {
                         } else if offset < 0 {
                             completionHandler(nil,ErrorHandler.WrongParameter)
                         }
-
-                    
+                        
+                        
                         self.db.executeQuery(query: rawQuery){ result in
                             var dict = count
                             
@@ -320,26 +336,54 @@ class StockService {
                             if offset > 0 {
                                 dict["offset"] = offset
                             }
-                            
                             switch(result){
-                                case .error(let error):
-                                    completionHandler(nil,error)
-                                case .resultSet(let resultSet):
-                                    dict["data"] = resultSet.asDictionaries()
-                                    completionHandler(dict,nil)
-                                case .successNoData:
-                                    dict["data"] = []
-                                    completionHandler(dict, nil)
-                                default:
-                                    completionHandler(nil,ErrorHandler.UnexpectedDataStructure)
+                            case .error(let error):
+                                completionHandler(nil,error)
+                            case .resultSet(let resultSet):
+                                dict["data"] = resultSet.asDictionaries()
+                                completionHandler(dict,nil)
+                            case .successNoData:
+                                dict["data"] = []
+                                completionHandler(dict, nil)
+                            default:
+                                completionHandler(nil,ErrorHandler.UnexpectedDataStructure)
                             }
                         }
-                } catch {
-                    completionHandler(nil,error)
+                    } catch {
+                        completionHandler(nil,error)
+                    }
                 }
             }
-            }
             else {
+                completionHandler(nil,ErrorHandler.NothingFoundFor("id : \(storeId)"))
+            }
+        }
+    }
+    
+    func getProductInStock(storeId: String,productId:String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()){
+        checkIfExist(id: storeId, table: store, column: store.refStore){ exist in
+            if exist{
+                
+                let query = "Select stock.*, products.name as product_name, products.refproduct as product_refproduct, products.creationdate as product_creationdate, products.picture as product_picture from \(self.stock.tableName) inner join \(self.product.tableName) on stock.refproduct=products.refproduct where stock.refstore='\(storeId)' and products.refproduct='\(productId)'"
+                
+                self.db.executeQuery(query: query){ result in
+                    switch(result){
+                    case .error(let error):
+                        completionHandler(nil, error)
+                    case .resultSet(let resultSet):
+                        do {
+                            let obj = try resultSet.singleRow()
+                            completionHandler(obj, nil)
+                        } catch {
+                            completionHandler(nil, error)
+                        }
+                    case .successNoData:
+                        completionHandler(nil,ErrorHandler.NothingFound)
+                    default:
+                        completionHandler(nil,ErrorHandler.UnexpectedDataStructure)
+                    }
+                }
+            } else {
                 completionHandler(nil,ErrorHandler.NothingFoundFor("id : \(storeId)"))
             }
         }
@@ -362,26 +406,26 @@ class StockService {
         var arrStock : [(Column,Any)] = [(Column,Any)]()
         
         if required == true {
-            guard let name = json["name"].string,
+            guard let name = json["product_name"].string,
                 let quantity = json["quantity"].int,
                 let vat = json["vat"].float,
-                let priceHT = json["priceHT"].float else {
+                let priceHT = json["priceht"].float else {
                     return (arrProduct,arrStock)
-                }
+            }
             arrProduct.append((product.name,name))
             arrStock.append((stock.quantity,quantity))
             arrStock.append((stock.vat,vat))
             arrStock.append((stock.priceHT,priceHT))
         } else {
-            if let name = json["name"].string { arrProduct.append((product.name,name)) }
+            if let name = json["product_name"].string { arrProduct.append((product.name,name)) }
             if let quantity = json["quantity"].int { arrStock.append((stock.quantity,quantity)) }
             if let vat = json["vat"].float { arrStock.append((stock.vat,vat)) }
-            if let priceHT = json["priceHT"].float { arrStock.append((stock.priceHT,priceHT)) }
+            if let priceHT = json["priceht"].float { arrStock.append((stock.priceHT,priceHT)) }
         }
         
-       
-        if let picture = json["picture"].string {
-           arrProduct.append((product.picture, picture))
+        
+        if let picture = json["product_picture"].string {
+            arrProduct.append((product.picture, picture))
         }
         
         

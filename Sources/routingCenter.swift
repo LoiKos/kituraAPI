@@ -35,7 +35,7 @@ func routingCenter(database: Database) -> Router {
 }
 
 
-func handleCompletion(result:[String : Any?]?, error:Error?, response: RouterResponse, next: @escaping () -> Void){
+func handleCompletion(result: Dictionary<String,Any>?, error:Error?, response: RouterResponse, next: @escaping () -> Void){
     guard error == nil else {
         Log.error("\(error.debugDescription)")
         response.error = error
@@ -43,15 +43,15 @@ func handleCompletion(result:[String : Any?]?, error:Error?, response: RouterRes
         return
     }
 
-    guard let responseBody = result else {
+    guard let responseBody = result  else {
         Log.error("Impossible to retrieve results")
         response.error = ErrorHandler.UnknowError
         next()
         return
     }
-
+    
     do{
-        try response.send(json: responseBody).end()
+        try response.send(json: JSON.parse(string: try responseBody.toJSON())).end()
     } catch {
         Log.error("Impossible to send response : \(error)")
     }
