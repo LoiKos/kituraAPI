@@ -15,37 +15,25 @@
 
 # <a name="Stores"></a> Stores
 
-URL : ` api/v1/stores `
+URL        :  ` api/v1/stores ` |  ` api/v1/stores/:id `
 
-Method: 
-<div style="background-color:rgb(63, 127, 191);">
-      <p>GET</p>
-</div> 
+Method     :  ` GET `,` POST `  |  ` DELETE ` , ` PATCH ` ` GET `
 
-| POST | DELETE | PUT
+URL Params :      none          |   id: required
 
-URL Params
-
-<If URL params exist, specify them in accordance with name mentioned in URL section. Separate into optional and required. Document data constraints.>
-
-Required:
-
-id=[integer]
-
-Optional:
-
-photo_id=[alphanumeric]
-
-Data Params
-
-<If making a post request, what should the body payload look like? URL Params rules apply here too.>
+Data Params : 
+```Swift
+{
+   "refStore": String   //  Auto generated do not modify
+   "name": String,      //  required
+   "picture":String,    //  optional
+} 
+```
 
 Success Response:
 
-<What should the status code be on success and is there any returned data? This is useful when people need to to know what their callbacks should expect!>
-
 Code: 200 
-Content: { id : 12 }
+Content: Store object
 Error Response:
 
 <Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be.>
