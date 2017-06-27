@@ -21,7 +21,7 @@ extension ResultSet {
         var mainRow:Dictionary<String,Any> = Dictionary<String,Any>()
         
         for item in self.rows {
-            if !mainRow.isEmpty { throw ErrorHandler.NothingFound }
+            if !mainRow.isEmpty { throw ErrorHandler.UnexpectedDataStructure }
             mainRow = Dictionary<String,Any>()
             for (index,value) in item.enumerated() {
                 mainRow[self.titles[index]] = value ?? ""
