@@ -27,11 +27,11 @@ public class ProductRouter {
     }
     
     private func setupRoutes(){
-        router.get("/:id", handler : getProductById )
-        router.patch("/:id", handler : updateProductById )
-        router.delete("/:id", handler : deleteProductById )
-        router.get("/", handler : getProducts)
-        router.post("/", handler : createProduct )
+        router.get( "/:id", handler : getProductById )
+        router.patch( "/:id", handler : updateProductById )
+        router.delete( "/:id", handler : deleteProductById )
+        router.get( "/", handler : getProducts )
+        router.post( "/", handler : createProduct )
         router.error(handleError)
     }
     
@@ -54,13 +54,13 @@ public class ProductRouter {
             }
             
             switch parsedBody {
-            case .json(let jsonBody):
-                try service.updateById(id: id, jsonBody: jsonBody) { result, error in
-                    response.status(.OK)
-                    handleCompletion(result:result, error: error,response: response,next: next)
-                }
-            default:
-                throw ErrorHandler.WrongType
+                case .json(let jsonBody):
+                    try service.updateById(id: id, jsonBody: jsonBody) { result, error in
+                        response.status(.OK)
+                        handleCompletion(result:result, error: error,response: response,next: next)
+                    }
+                default:
+                    throw ErrorHandler.WrongType
             }
         } else {
             throw ErrorHandler.MissingRequireProperty("id")
@@ -104,13 +104,13 @@ public class ProductRouter {
         }
         
         switch parsedBody {
-        case .json(let jsonBody):
-            try service.create(body: jsonBody) { result, error in
-                response.status(.created)
-                handleCompletion(result: result, error: error, response: response, next: next)
-            }
-        default:
-            throw ErrorHandler.WrongType
+            case .json(let jsonBody):
+                try service.create(body: jsonBody) { result, error in
+                    response.status(.created)
+                    handleCompletion(result: result, error: error, response: response, next: next)
+                }
+            default:
+                throw ErrorHandler.WrongType
         }
     }
 }
