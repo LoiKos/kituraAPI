@@ -96,11 +96,11 @@ Content:
 
 Example : 
 
-[x] Empty JSON Body for POST or PATCH
+- [x] Empty JSON Body for POST or PATCH
           
-[x] Missing required properties POST
+- [x] Missing required properties POST
 
-[x] Wrong limit or offset ( < 0 )
+- [x] Wrong limit or offset ( < 0 )
 
 ### Code: 404 NOT FOUND 
 
@@ -119,6 +119,7 @@ Example : Id not found in database
 first download required images :
 
 ` docker pull postgres `
+
 ` docker pull swift `
 
 # <a name="Cov"></a> Code Coverage
