@@ -11,7 +11,8 @@
 
 # <a name="Doc"></a> Api Documentation
 
-<Additional information about your API call. Try to use verbs that match both request type (fetching vs modifying) and plurality (one vs multiple).>
+This API as been design to be used to tests the kitura framework performances. 
+This API is made to work with a PostgreSQL Database and provide a way to interact with stores and products.
 
 # <a name="Stores"></a> Stores
 
@@ -19,10 +20,68 @@ URL        :  ` api/v1/stores ` |  ` api/v1/stores/:id `
 
 Method     :  ` GET `,` POST `  |  ` DELETE ` , ` PATCH ` ` GET `
 
-URL Params :      none          |   id: required
+URL Params :      none          |   id: required
 
-Data Params : 
+Parameters :  ` Limit ` and ` Offet ` with GET  | None
+
+Request body Structure : 
 ```Swift
+// Store obj
+{
+   "refStore": String   //  Auto generated do not modify
+   "name": String,      //  required
+   "picture":String,    //  optional
+   "vat":Double,        //  optional
+   "currency":String,   //  optional
+   "merchantkey":String //  optional
+} 
+```
+
+Code 
+
+### Code: 200 OK
+
+Content: 
+
+```Swift
+// Store obj
+{
+   "refStore": String   //  Auto generated do not modify
+   "name": String,      //  required
+   "picture":String,    //  optional
+   "vat":Double,        //  optional
+   "currency":String,   //  optional
+   "merchantkey":String //  optional
+} 
+```
+OR
+
+```Swift
+[
+   {
+      "refStore": String   //  Auto generated do not modify
+      "name": String,      //  required
+      "picture":String,    //  optional
+      "vat":Double,        //  optional
+      "currency":String,   //  optional
+      "merchantkey":String //  optional
+   },{
+      "refStore": String   //  Auto generated do not modify
+      "name": String,      //  required
+      "picture":String,    //  optional
+      "vat":Double,        //  optional
+      "currency":String,   //  optional
+      "merchantkey":String //  optional
+   }
+   ,...
+] 
+```
+
+### Code: 201 CREATED
+
+Content: 
+```Swift
+// Store obj
 {
    "refStore": String   //  Auto generated do not modify
    "name": String,      //  required
@@ -30,27 +89,12 @@ Data Params :
 } 
 ```
 
-Success Response:
+### Code: 400 BAD REQUEST 
 
-Code: 200 
-Content: Store object
-Error Response:
+### Code: 404 NOT FOUND 
 
-<Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be.>
+### Code: 500 INTERNAL SERVER ERROR 
 
-Code: 401 UNAUTHORIZED 
-Content: { error : "Log in" }
-OR
-
-Code: 422 UNPROCESSABLE ENTRY 
-Content: { error : "Email Invalid" }
-Sample Call:
-
-<Just a sample call to your endpoint in a runnable format ($.ajax call or a curl request) - this makes life easier and more predictable.>
-
-Notes:
-
-<This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here.>
 
 # <a name="Products"></a> Products
 # <a name="Stock"></a> Stock
