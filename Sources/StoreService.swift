@@ -16,12 +16,14 @@ class StoreService {
     
     let store = Store()
     let db : Database
+    let ref : Reference
     
     init(database:Database){
         self.db = database
+        self.ref = Reference.sharedInstance
     }
     
-    func create(body:JSON, oncompletion: @escaping ([String : Any?]?, Error?) -> ()) throws {
+    func create(body:JSON, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
         
         guard let name = body["name"].string else {
             throw ErrorHandler.MissingRequireProperty("name")
@@ -36,7 +38,7 @@ class StoreService {
         if let vat = body["vat"].string {
             tuples.append((store.vat, vat))
         }
-        if let merchantKey = body["merchantKey"].string {
+        if let merchantKey = body["merchantkey"].string {
              tuples.append((store.merchantKey, merchantKey))
         }
         if let currency = body["currency"].string {
@@ -47,10 +49,10 @@ class StoreService {
             throw ErrorHandler.WrongParameter
         }
         
-        let id = generateRef()
+        let id = ref.generateRef()
         tuples.append((store.refStore, id))
         
-        let query = Insert(into: store, valueTuples: tuples).suffix("RETURNING refStore")
+        let query = Insert(into: store, valueTuples: tuples).suffix("RETURNING *")
         
         db.executeQuery(query: query) { result in
             switch result {
@@ -58,7 +60,7 @@ class StoreService {
                     oncompletion(nil,error)
                 case .resultSet(let resultSet):
                     do {
-                        try oncompletion(resultSet.uniqueSingleRow(),nil)
+                        try oncompletion(resultSet.singleRow(),nil)
                     } catch {
                         Log.error("Malformed resulset")
                         oncompletion(nil, ErrorHandler.UnexpectedDataStructure)
@@ -70,7 +72,7 @@ class StoreService {
     }
     
     
-    func findAll(limit:Int = 0, offset:Int = 0, oncompletion: @escaping ([String : Any?]?, Error?) -> ()) throws {
+    func findAll(limit:Int = 0, offset:Int = 0, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
         
         let query : Select = Select(from: store).order(by: .ASC(store.name))
         var rawQuery : String = ""
@@ -104,7 +106,7 @@ class StoreService {
                     case .error(let error):
                         oncompletion( nil, error )
                     case .successNoData:
-                        var dict : [String: Any?] = [String: Any?]()
+                        var dict = Dictionary<String,Any>()
                         dict["total"] = numberElement
                         if limit != 0 {
                             dict["limit"] = limit
@@ -115,7 +117,7 @@ class StoreService {
                         dict["data"] = [[String: Any?]]()
                         oncompletion(dict, nil)
                     case .resultSet(let resultSet):
-                        var dict : [String: Any?] = [String: Any?]()
+                        var dict = Dictionary<String,Any>()
                         
                         dict["total"] = numberElement
                         if limit != 0 {
@@ -136,7 +138,7 @@ class StoreService {
     
     
     
-    func findById(id:String, oncompletion: @escaping ([String:Any?]?, Error?) -> ()){
+    func findById(id:String, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()){
         let select = Select(from:store).where(store.refStore == id)
         
         db.executeQuery(query: select){ result in
@@ -145,7 +147,7 @@ class StoreService {
                     oncompletion(nil,error)
                 case .resultSet(let resultSet):
                     do {
-                        try oncompletion(resultSet.uniqueSingleRow(),nil)
+                        try oncompletion(resultSet.singleRow(),nil)
                     } catch {
                         Log.error("Malformed resulset")
                         oncompletion(nil, ErrorHandler.UnexpectedDataStructure)
@@ -158,7 +160,7 @@ class StoreService {
         }
     }
     
-    func updateById(id: String, jsonBody: JSON, oncompletion: @escaping ([String:Any?]?,Error?) -> ()) throws {
+    func updateById(id: String, jsonBody: JSON, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
         var updatedValue : [(Column,Any)] = [(Column,Any)]()
         
         if let name = jsonBody["name"].string {
@@ -171,7 +173,7 @@ class StoreService {
         if let vat = jsonBody["vat"].float {
             updatedValue.append((store.vat,vat))
         }
-        if let merchantKey = jsonBody["merchantKey"].string {
+        if let merchantKey = jsonBody["merchantkey"].string {
             updatedValue.append((store.merchantKey,merchantKey))
         }
         
@@ -190,11 +192,13 @@ class StoreService {
                             oncompletion(nil,error)
                         case .resultSet(let resultSet):
                             do {
-                                try oncompletion(resultSet.uniqueSingleRow(),nil)
+                                try oncompletion(resultSet.singleRow(),nil)
                             } catch {
                                 Log.error("Malformed resulset")
                                 oncompletion(nil, ErrorHandler.UnexpectedDataStructure)
                             }
+                        case .successNoData:
+                            oncompletion(nil, ErrorHandler.NothingFoundFor(id))
                         default:
                             oncompletion(nil,ErrorHandler.UnexpectedDataStructure)
                     }
@@ -207,7 +211,7 @@ class StoreService {
         }
     }
     
-    func deleteById(id:String, oncompletion: @escaping ([String:Any?]?,Error?) -> ()){
+    func deleteById(id:String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()){
        
         let delete = Delete(from: store).where(store.refStore == id).suffix("RETURNING *")
         
@@ -217,12 +221,12 @@ class StoreService {
                     oncompletion(nil,error)
                 case .resultSet(let resultSet):
                     do {
-                        try oncompletion(resultSet.uniqueSingleRow(),nil)
+                        try oncompletion(resultSet.singleRow(),nil)
                     } catch {
                         Log.error("Malformed resulset")
                         oncompletion(nil, ErrorHandler.UnexpectedDataStructure)
                     }
-                case .success(let result):
+                case .success( _):
                      oncompletion(nil,ErrorHandler.UnexpectedDataStructure)
                 case .successNoData:
                      oncompletion(nil,ErrorHandler.NothingFoundFor("id : \(id)"))
@@ -230,7 +234,7 @@ class StoreService {
         }
     }
     
-    private func count(oncompletion: @escaping ([String:Any?]?,Error?) -> ()){
+    private func count(oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()){
         let query : String = "select count(*) from stores"
         db.executeQuery(query:query) { queryResult in
             switch(queryResult){
@@ -238,7 +242,7 @@ class StoreService {
                     oncompletion(nil,error)
                 case .resultSet(let resultSet):
                     do {                    
-                        try oncompletion(resultSet.uniqueSingleRow(),nil)
+                        try oncompletion(resultSet.singleRow(),nil)
                     } catch {
                         Log.error("Malformed resulset")
                         oncompletion(nil, ErrorHandler.UnexpectedDataStructure)

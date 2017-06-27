@@ -92,7 +92,6 @@ public class StoreRouter {
 
         try service.findAll(limit: limit, offset: offset) { result, error in
             response.status(.OK)
-            print(result)
             handleCompletion(result: result, error: error, response: response, next: next)
         }
     }
