@@ -86,12 +86,25 @@ Content:
    "refStore": String   //  Auto generated do not modify
    "name": String,      //  required
    "picture":String,    //  optional
+   "vat":Double,        //  optional
+   "currency":String,   //  optional
+   "merchantkey":String //  optional
 } 
 ```
 
 ### Code: 400 BAD REQUEST 
 
+Example : 
+
+[x] Empty JSON Body for POST or PATCH
+          
+[x] Missing required properties POST
+
+[x] Wrong limit or offset ( < 0 )
+
 ### Code: 404 NOT FOUND 
+
+Example : Id not found in database  
 
 ### Code: 500 INTERNAL SERVER ERROR 
 
@@ -103,7 +116,10 @@ Content:
 
 # <a name="Docker"></a> Work with Docker
 
-*Coming Soon* 
+first download required images :
+
+` docker pull postgres `
+` docker pull swift `
 
 # <a name="Cov"></a> Code Coverage
 
