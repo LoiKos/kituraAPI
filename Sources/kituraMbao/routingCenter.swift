@@ -12,8 +12,8 @@ import SwiftyJSON
 import SwiftKuery
 import LoggerAPI
 
-func routingCenter(database: Database) -> Router {
-
+func routingCenter() -> Router {
+    
     let router = Router()
 
     router.all("*", middleware: BodyParser()) // Parse incoming request body
@@ -22,13 +22,13 @@ func routingCenter(database: Database) -> Router {
         try response.send(status: .notFound).end()
     }
 
-    let stockRouter = StockRouter(database: database).router
+    let stockRouter = StockRouter().router
     router.all("/api/v1/stores/:storeId/products", middleware: stockRouter)
 
-    let storeRouter = StoreRouter(database: database).router
+    let storeRouter = StoreRouter().router
     router.all("/api/v1/stores", middleware: storeRouter)
 
-    let productRouter = ProductRouter(database: database).router
+    let productRouter = ProductRouter().router
     router.all("/api/v1/products", middleware: productRouter)
 
     return router

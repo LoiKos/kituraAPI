@@ -24,7 +24,7 @@ class Stock : Table {
     let priceHT = Column("priceHT")
     let vat = Column("vat")
     
-    static func prepare(){
+    static func prepare() throws {
         let query : String = "CREATE TABLE IF NOT EXISTS stock ( refStore varchar(255) NOT NULL REFERENCES stores,"
                            + "refProduct varchar(255) NOT NULL REFERENCES products,"
                            + "quantity integer,"
@@ -35,7 +35,11 @@ class Stock : Table {
                            + "vat decimal,"
                            + "PRIMARY KEY (refStore,refProduct) );"
         
-       db.executeQuery(query: query) { result in
+        guard let connection = pool.getConnection() else {
+            throw ErrorHandler.DBPoolEmpty
+        }
+
+        connection.execute(query) { result in
             if let error = result.asError {
                 Log.error(String(describing: error))
             } else {

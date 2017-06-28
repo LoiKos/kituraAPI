@@ -22,7 +22,7 @@ class Product : Table {
     let picture = Column("picture")
     let creationDate = Column("creationDate")
     
-    static func prepare(){
+    static func prepare() throws {
         
      var query:CreateTable = CreateTable(tableName: "products")
          query.addColumn("refProduct", type: .varchar(number: 255), notNull: true, primaryKey: true)
@@ -30,11 +30,15 @@ class Product : Table {
          query.addColumn("name", type: .varchar(number: 255))
          query.addColumn("creationDate", type: .timestamp)
         
-        db.executeQuery(query: query) { result in
+        guard let connection = pool.getConnection() else {
+            throw ErrorHandler.DBPoolEmpty
+        }
+        
+        connection.execute(query:query) { result in
             if let error = result.asError {
                 Log.error(String(describing: error))
             } else {
-                Log.debug("Table prepare with success")
+                Log.info("Table prepare with Success")
             }
         }
     }

@@ -15,11 +15,9 @@ import SwiftyJSON
 class StoreService {
     
     let store = Store()
-    let db : Database
     let ref : Reference
     
-    init(database:Database){
-        self.db = database
+    init(){
         self.ref = Reference.sharedInstance
     }
     
@@ -54,7 +52,11 @@ class StoreService {
         
         let query = Insert(into: store, valueTuples: tuples).suffix("RETURNING *")
         
-        db.executeQuery(query: query) { result in
+        guard let connection = pool.getConnection() else {
+            throw ErrorHandler.DBPoolEmpty
+        }
+        
+        connection.execute(query: query) { result in
             switch result {
                 case .error(let error):
                     oncompletion(nil,error)
@@ -76,13 +78,17 @@ class StoreService {
         
         let query : Select = Select(from: store).order(by: .ASC(store.name))
         var rawQuery : String = ""
+        
+        guard let connection = pool.getConnection() else {
+            throw ErrorHandler.DBPoolEmpty
+        }
 
         if limit > 0 {
-            rawQuery = try db.connection.descriptionOf(query: query.limit(to: limit))
+            rawQuery = try connection.descriptionOf(query: query.limit(to: limit))
         } else if limit < 0 {
             throw ErrorHandler.WrongParameter
         } else {
-            rawQuery = try db.connection.descriptionOf(query: query)
+            rawQuery = try connection.descriptionOf(query: query)
         }
         
         if offset > 0 {
@@ -91,7 +97,7 @@ class StoreService {
             throw ErrorHandler.WrongParameter
         }
         
-        count(){ countResult, errorCount in
+        count(connection: connection){ countResult, errorCount in
             guard let numberElement = countResult?["count"] else {
                 if let error = errorCount {
                     oncompletion(nil, error)
@@ -101,7 +107,7 @@ class StoreService {
                 return
             }
             
-            self.db.executeQuery(query: rawQuery){ result in
+            connection.execute(rawQuery){ result in
                 switch result {
                     case .error(let error):
                         oncompletion( nil, error )
@@ -138,10 +144,14 @@ class StoreService {
     
     
     
-    func findById(id:String, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()){
+    func findById(id:String, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
         let select = Select(from:store).where(store.refStore == id)
         
-        db.executeQuery(query: select){ result in
+        guard let connection = pool.getConnection() else {
+            throw ErrorHandler.DBPoolEmpty
+        }
+        
+        connection.execute(query: select){ result in
             switch result {
                 case .error(let error):
                     oncompletion(nil,error)
@@ -161,6 +171,10 @@ class StoreService {
     }
     
     func updateById(id: String, jsonBody: JSON, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
+        guard let connection = pool.getConnection() else {
+            throw ErrorHandler.DBPoolEmpty
+        }
+        
         var updatedValue : [(Column,Any)] = [(Column,Any)]()
         
         if let name = jsonBody["name"].string {
@@ -185,7 +199,7 @@ class StoreService {
             if jsonBody.count == updatedValue.count {
                 let query : Update = Update(store, set: updatedValue).where(store.refStore == id).suffix("RETURNING *")
                 
-                db.executeQuery(query: query){ result in
+                connection.execute(query: query){ result in
                     
                     switch result {
                         case .error(let error):
@@ -211,11 +225,15 @@ class StoreService {
         }
     }
     
-    func deleteById(id:String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()){
+    func deleteById(id:String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
        
         let delete = Delete(from: store).where(store.refStore == id).suffix("RETURNING *")
         
-        db.executeQuery(query: delete){ queryResult in
+        guard let connection = pool.getConnection() else {
+            throw ErrorHandler.DBPoolEmpty
+        }
+        
+        connection.execute(query: delete){ queryResult in
             switch(queryResult){
                 case .error(let error):
                     oncompletion(nil,error)
@@ -234,9 +252,9 @@ class StoreService {
         }
     }
     
-    private func count(oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()){
+    private func count(connection:Connection,oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) {
         let query : String = "select count(*) from stores"
-        db.executeQuery(query:query) { queryResult in
+        connection.execute(query) { queryResult in
             switch(queryResult){
                 case .error(let error):
                     oncompletion(nil,error)

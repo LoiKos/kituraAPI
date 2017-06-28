@@ -20,8 +20,8 @@ public class ProductRouter {
     
     public let router: Router
     
-    init(database: Database){
-        service = ProductService(database: database)
+    init(){
+        service = ProductService()
         router = Router()
         setupRoutes()
     }
@@ -38,7 +38,7 @@ public class ProductRouter {
     
     private func getProductById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         if let id = request.parameters["id"] {
-            service.findById(id: id) { result, error in
+            try service.findById(id: id) { result, error in
                 response.status(.OK)
                 handleCompletion(result: result, error: error, response: response, next: next)
             }
@@ -69,7 +69,7 @@ public class ProductRouter {
     
     private func deleteProductById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         if let id = request.parameters["id"] {
-            service.deleteById(id: id) { result, error in
+            try service.deleteById(id: id) { result, error in
                 response.status(.OK)
                 handleCompletion(result: result, error: error, response: response, next: next)
             }

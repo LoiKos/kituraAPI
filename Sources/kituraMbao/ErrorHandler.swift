@@ -34,6 +34,7 @@ enum ErrorHandler : Error, CustomStringConvertible {
     case NothingFound
     case UnexpectedDataStructure
     case badRequest
+    case DBPoolEmpty
     
     var description: String {
         switch self {
@@ -72,6 +73,9 @@ enum ErrorHandler : Error, CustomStringConvertible {
             
         case .badRequest:
             return "Request is not conform to API specifications"
+            
+        case .DBPoolEmpty:
+            return "All pool connection are used currently"
         }
     }
     
@@ -105,6 +109,8 @@ public func handleError(request: RouterRequest, response: RouterResponse, next: 
             response.status(.badRequest)
         case .NothingFoundFor,.NothingFound:
             response.status(.notFound)
+        case .DBPoolEmpty:
+            response.status(.serviceUnavailable)
         default:
             response.status(.internalServerError)
         }

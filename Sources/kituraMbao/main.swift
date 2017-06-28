@@ -8,14 +8,14 @@ let logger = HeliumLogger(.debug)
 logger.colored = true
 Log.logger = logger
 
-// connect to database
-let db = try Database.environmentDatabase()
+// grant access to connection pool all over the API
+let pool = try Database().pool
 
-Store.prepare()
-Product.prepare()
-Stock.prepare()
+try Store.prepare()
+try Product.prepare()
+try Stock.prepare()
 
-let router = routingCenter(database: db)
+let router = routingCenter()
 
 // Server preparations
 let port = Int(ProcessInfo.processInfo.environment["PORT"] ?? "8080") ?? 8080

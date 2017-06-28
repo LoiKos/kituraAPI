@@ -24,7 +24,7 @@ class Store : Table {
     let currency = Column("currency")
     let merchantKey = Column("merchantKey")
     
-    static func prepare(){
+    static func prepare() throws {
         
         var query:CreateTable = CreateTable(tableName: "stores")
             query.addColumn("refStore", type: .varchar(number: 255), notNull: true, primaryKey: true)
@@ -34,13 +34,17 @@ class Store : Table {
             query.addColumn("currency", type: .varchar(number:255))
             query.addColumn("merchantKey", type: .varchar(number: 255))
             
-            db.executeQuery(query: query) { result in
-                if let error = result.asError {
-                    Log.error(String(describing: error))
-                } else {
-                    Log.info("Table prepare with Success")
-                }
+        guard let connection = pool.getConnection() else {
+            throw ErrorHandler.DBPoolEmpty
+        }
+        
+        connection.execute(query:query) { result in
+            if let error = result.asError {
+                Log.error(String(describing: error))
+            } else {
+                Log.info("Table prepare with Success")
             }
+        }
     }
     
 }
