@@ -20,8 +20,8 @@ public class StockRouter {
     
     public let router: Router
     
-    init(){
-        service = StockService()
+    init(pool:ConnectionPool)  {
+        service = StockService(pool:pool)
         router = Router(mergeParameters: true)
         setupRoutes()
     }

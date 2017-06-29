@@ -24,7 +24,7 @@ class Store : Table {
     let currency = Column("currency")
     let merchantKey = Column("merchantKey")
     
-    static func prepare() throws {
+    static func prepare(pool:ConnectionPool) throws {
         
         var query:CreateTable = CreateTable(tableName: "stores")
             query.addColumn("refStore", type: .varchar(number: 255), notNull: true, primaryKey: true)

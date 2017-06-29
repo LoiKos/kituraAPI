@@ -20,9 +20,11 @@ class StockService {
     let store = Store()
     
     let ref : Reference
+    let pool : ConnectionPool
     
-    init(){
+    init(pool:ConnectionPool) {
         self.ref = Reference.sharedInstance
+        self.pool = pool
     }
     
     
@@ -41,74 +43,79 @@ class StockService {
             }
             
             connection.startTransaction() { result in
-                let group = DispatchGroup()
-                let queue = DispatchQueue(label:"update",attributes: .concurrent)
+                let queue = DispatchQueue(label: "com.orange.update")
                 var errorG : ErrorHandler? = nil
                 
-//                queue.sync(group: group) {
-//                    Log.info("Enter queue 1")
-//                    if !productJson.isEmpty {
-//                        let productUpdate : Update = Update(self.product, set: productJson).where("products.refproduct = '\(productId)'").suffix("Returning *")
-//                        Log.info("Try Update")
-//                        connection.execute(query: productUpdate){ result in
-//                            Log.info("update result : \(result)")
-//                            if let error = result.asError {
-//                                Log.error("\(error)")
-//                                errorG = ErrorHandler.DatabaseError(error.localizedDescription)
-//                            }
-//                            group.leave()
-//                        }
-//                    } else {
-//                        Log.info("Empty")
-//                    }
-//                }
-//                
-//                queue.sync(group: group) {
-//                    Log.info("Enter queue 2")
-//                    if !stockJson.isEmpty {
-//                        stockJson.append((self.stock.lastUpdate,Date()))
-//                        let stockUpdate : Update = Update(self.stock, set: stockJson).where("stock.refproduct = '\(productId)' and stock.refstore = '\(storeId)'").suffix("Returning *")
-//                        Log.info("Try Update \(connection.isConnected)")
-//                        connection.execute(query: stockUpdate){ result in
-//                            Log.info("update result : \(result)")
-//                            if let error = result.asError {
-//                                Log.error("\(error)")
-//                                errorG = ErrorHandler.DatabaseError(error.localizedDescription)
-//                            }
-//                            group.leave()
-//                        }
-//                    } else {
-//                        Log.info("Empty")
-//                    }
-//                }
-//                
-//                group.notify(queue: queue) {
-//                    Log.info("Enter Notify")
-//                    if let errorG = errorG {
-//                            connection.rollback(){ rollbackStatus in
-//                            completionHandler(nil, ErrorHandler.DatabaseError(errorG.localizedDescription))
-//                        }
-//                        connection.closeConnection()
-//                    }
-//                    else {
-//                        connection.commit(){ result in
-//                            Log.info("\(result),\(result.success)")
-//                            guard result.success else {
-//                                connection.rollback(){ rollbackStatus in
-//                                    completionHandler(nil, ErrorHandler.DatabaseError("Impossible to commit"))
-//                                }
-//                                connection.closeConnection()
-//                                return
-//                            }
-//                            connection.closeConnection()
-//                            self.getProductInStock(storeId: storeId, productId: productId){ dictionary, error in
-//                                completionHandler(dictionary, error)
-//                            }
-//                            
-//                        }
-//                    }
-//                }
-//                
+                queue.sync {
+                    Log.info("start product update process ")
+                    if !productJson.isEmpty {
+                        let productUpdate : Update = Update(self.product, set: productJson).where("products.refproduct = '\(productId)'").suffix("Returning *")
+                        connection.execute(query: productUpdate){ result in
+                            if let error = result.asError{
+                                Log.error("\(error)")
+                                errorG = ErrorHandler.DatabaseError(error.localizedDescription)
+                            }
+                            Log.info("product update succeed ")
+                        }
+                    } else {
+                        errorG = ErrorHandler.EmptyBody
+                    }
+                }
+                
+                guard errorG == nil else {
+                    connection.rollback(){ rollbackStatus in
+                        completionHandler(nil, ErrorHandler.DatabaseError((errorG?.localizedDescription)!))
+                    }
+                    return
+                }
+                
+                queue.sync {
+                    Log.info("start stock update process ")
+                    if !stockJson.isEmpty {
+                        stockJson.append((self.stock.lastUpdate,Date()))
+                        let stockUpdate : Update = Update(self.stock, set: stockJson).where("stock.refproduct = '\(productId)' and stock.refstore = '\(storeId)'").suffix("Returning *")
+                        connection.execute(query: stockUpdate){ result in
+                            if let error = result.asError{
+                                Log.error("\(error)")
+                                errorG = ErrorHandler.DatabaseError(error.localizedDescription)
+                            }
+                            Log.info("stock update succeed ")
+                        }
+                    } else {
+                        errorG = ErrorHandler.EmptyBody
+                    }
+                }
+                
+                guard errorG == nil else {
+                    connection.rollback(){ rollbackStatus in
+                        completionHandler(nil, ErrorHandler.DatabaseError((errorG?.localizedDescription)!))
+                    }
+                    return
+                }
+                
+                queue.sync {
+                    Log.info("Enter Notify")
+                    connection.commit(){ result in
+                        Log.info("\(result),\(result.success)")
+                        guard result.success else {
+                            connection.rollback(){ rollbackStatus in
+                                completionHandler(nil, ErrorHandler.DatabaseError("Impossible to commit"))
+                            }
+                            connection.closeConnection()
+                            return
+                        }
+                        connection.closeConnection()
+                        do {
+                            try self.getProductInStock(storeId: storeId, productId: productId){ dictionary, error in
+                                completionHandler(dictionary, error)
+                            }
+                        } catch {
+                            completionHandler(nil,error)
+                        }
+                    }
+                    
+                }
+                
             }
         } else {
             Log.error("Bad parameters")
@@ -300,15 +307,25 @@ class StockService {
             throw ErrorHandler.DBPoolEmpty
         }
         
-        checkIfExist(id: storeId, table: store, column: store.refStore, connection: connection ){ exist in
+       
+        let test : String = "select count(*) from stores"
+        
+        connection.execute(test){result in
+            print(result)
+            connection.execute("select count(*) from stock"){ result in
+                print(result)
+            }
+        }
+    
+       /* checkIfExist(id: storeId, table: store, column: store.refStore, connection: connection ){ exist in
             if exist {
-                let count = "select count(*) from stock where stock.refStore = '\(storeId)'"
-                
-                connection.execute(count){ result in
+                let query : String = "select count(*) from stores"
+                connection.execute(query){ result in
                     do {
+                        print(result)
                         var count = Dictionary<String,Any>()
                         if let countResponse = try result.asResultSet?.singleRow(),
-                            let countInt = countResponse["count"] as? Int64
+                           let countInt = countResponse["count"] as? Int64
                         {
                             count["Total"] = Int(countInt)
                         } else {
@@ -335,7 +352,7 @@ class StockService {
                         }
                         
                         
-                       connection.execute(rawQuery){ result in
+                        connection.execute(rawQuery){ result in
                             var dict = count
                             
                             if limit > 0 {
@@ -366,7 +383,7 @@ class StockService {
             else {
                 completionHandler(nil,ErrorHandler.NothingFoundFor("id : \(storeId)"))
             }
-        }
+        } */
     }
     
     func getProductInStock(storeId: String,productId:String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
@@ -378,9 +395,8 @@ class StockService {
         checkIfExist(id: storeId, table: store, column: store.refStore, connection: connection){ exist in
             if exist{
                 
-                let query = "Select stock.*, products.name as product_name, products.refproduct as product_refproduct, products.creationdate as product_creationdate, products.picture as product_picture from \(self.stock.tableName) inner join \(self.product.tableName) on stock.refproduct=products.refproduct where stock.refstore='\(storeId)' and products.refproduct='\(productId)'"
-                
-                connection.execute(query){ result in
+                let query = "Select stock.*, products.name as product_name, products.refproduct as product_refproduct, products.creationdate as product_creationdate, products.picture as product_picture from \(self.stock.tableName) inner join \(self.product.tableName) on stock.refproduct=products.refproduct where stock.refstore=$1 and products.refproduct=$2"
+                connection.execute(query,parameters:[storeId,productId]){ result in
                     switch(result){
                     case .error(let error):
                         completionHandler(nil, error)
@@ -407,11 +423,12 @@ class StockService {
     private func checkIfExist( id: String, table: Table, column: Column, connection: Connection, completionHandler: @escaping (Bool) -> () ) {
         var bool = false
         let query = "select 1 from \(table.nameInQuery) where \(table.nameInQuery).\(column.name) = '\(id)' limit 1"
+        
         connection.execute(query){ result in
             if (result.asResultSet != nil) {
                 bool = true
             }
-            completionHandler( bool )
+            completionHandler(bool)
         }
     }
     

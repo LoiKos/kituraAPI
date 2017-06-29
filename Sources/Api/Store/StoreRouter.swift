@@ -20,8 +20,8 @@ public class StoreRouter {
 
     public let router: Router
 
-    init(){
-        service = StoreService()
+    init(pool:ConnectionPool)  {
+        service = StoreService(pool:pool)
         router = Router()
         setupRoutes()
     }

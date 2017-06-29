@@ -12,20 +12,18 @@ import SwiftKuery
 import LoggerAPI
 import SwiftyJSON
 
-
-
 public class ProductRouter {
     
     let service : ProductService
     
     public let router: Router
     
-    init(){
-        service = ProductService()
+    init(pool:ConnectionPool) {
+        service = ProductService(pool:pool)
         router = Router()
         setupRoutes()
     }
-    
+
     private func setupRoutes(){
         router.get( "/:id", handler : getProductById )
         router.patch( "/:id", handler : updateProductById )

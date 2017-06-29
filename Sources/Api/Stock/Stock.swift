@@ -24,7 +24,7 @@ class Stock : Table {
     let priceHT = Column("priceHT")
     let vat = Column("vat")
     
-    static func prepare() throws {
+    static func prepare(pool:ConnectionPool) throws {
         let query : String = "CREATE TABLE IF NOT EXISTS stock ( refStore varchar(255) NOT NULL REFERENCES stores,"
                            + "refProduct varchar(255) NOT NULL REFERENCES products,"
                            + "quantity integer,"

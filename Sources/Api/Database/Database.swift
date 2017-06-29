@@ -20,7 +20,7 @@ struct Database {
     private var userName : String = "postgres"
     private var password : String = ""
     
-    public var pool:ConnectionPool
+    public var pool: ConnectionPool
     
     init() throws {
         
@@ -39,7 +39,13 @@ struct Database {
         self.userName = userName
         self.password = password
         
-        pool = PostgreSQLConnection.createPool(host: host, port: port, options: [.userName(userName),.password(password)], poolOptions:  ConnectionPoolOptions(initialCapacity: 5, maxCapacity: 50, timeout: 50))
+        pool = PostgreSQLConnection.createPool(host: host, port: port, options: [.userName(userName),.password(password),.databaseName(database)], poolOptions:  ConnectionPoolOptions(initialCapacity: 10, maxCapacity: 50, timeout: 10000))
+    }
+    
+    func preparation() throws {
+        try Store.prepare(pool:self.pool)
+        try Product.prepare(pool:self.pool)
+        try Stock.prepare(pool:self.pool)
     }
 }
 

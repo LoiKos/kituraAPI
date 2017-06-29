@@ -22,7 +22,7 @@ class Product : Table {
     let picture = Column("picture")
     let creationDate = Column("creationDate")
     
-    static func prepare() throws {
+    static func prepare(pool:ConnectionPool) throws {
         
      var query:CreateTable = CreateTable(tableName: "products")
          query.addColumn("refProduct", type: .varchar(number: 255), notNull: true, primaryKey: true)

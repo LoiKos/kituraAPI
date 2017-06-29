@@ -16,9 +16,11 @@ class StoreService {
     
     let store = Store()
     let ref : Reference
+    let pool : ConnectionPool
     
-    init(){
+    init(pool:ConnectionPool) {
         self.ref = Reference.sharedInstance
+        self.pool = pool
     }
     
     func create(body:JSON, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
