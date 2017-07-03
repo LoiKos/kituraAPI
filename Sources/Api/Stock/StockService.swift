@@ -47,7 +47,7 @@ class StockService {
                 var errorG : ErrorHandler? = nil
                 
                 queue.sync {
-                    if !productJson.isEmpty {
+                    if !(productJson.isEmpty) {
                         let productUpdate : Update = Update(self.product, set: productJson).where("products.refproduct = '\(productId)'")
                         connection.execute(query: productUpdate){ result in
                             switch result {
@@ -58,8 +58,6 @@ class StockService {
                                 return
                             }
                         }
-                    } else {
-                        errorG = ErrorHandler.EmptyBody
                     }
                 }
                 
@@ -71,7 +69,7 @@ class StockService {
                 }
                 
                 queue.sync {
-                    if !stockJson.isEmpty {
+                    if !(stockJson.isEmpty) {
                         stockJson.append((self.stock.lastUpdate,Date()))
                         let stockUpdate : Update = Update(self.stock, set: stockJson).where("stock.refproduct = '\(productId)' and stock.refstore = '\(storeId)'")
                         connection.execute(query: stockUpdate){ result in
@@ -80,8 +78,6 @@ class StockService {
                                 errorG = ErrorHandler.DatabaseError(error.localizedDescription)
                             }
                         }
-                    } else {
-                        errorG = ErrorHandler.EmptyBody
                     }
                 }
                 
