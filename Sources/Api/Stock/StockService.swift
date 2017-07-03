@@ -47,15 +47,16 @@ class StockService {
                 var errorG : ErrorHandler? = nil
                 
                 queue.sync {
-                    Log.info("start product update process ")
                     if !productJson.isEmpty {
-                        let productUpdate : Update = Update(self.product, set: productJson).where("products.refproduct = '\(productId)'").suffix("Returning *")
+                        let productUpdate : Update = Update(self.product, set: productJson).where("products.refproduct = '\(productId)'")
                         connection.execute(query: productUpdate){ result in
-                            if let error = result.asError{
+                            switch result {
+                            case .error(let error):
                                 Log.error("\(error)")
                                 errorG = ErrorHandler.DatabaseError(error.localizedDescription)
+                            default:
+                                return
                             }
-                            Log.info("product update succeed ")
                         }
                     } else {
                         errorG = ErrorHandler.EmptyBody
@@ -70,16 +71,14 @@ class StockService {
                 }
                 
                 queue.sync {
-                    Log.info("start stock update process ")
                     if !stockJson.isEmpty {
                         stockJson.append((self.stock.lastUpdate,Date()))
-                        let stockUpdate : Update = Update(self.stock, set: stockJson).where("stock.refproduct = '\(productId)' and stock.refstore = '\(storeId)'").suffix("Returning *")
+                        let stockUpdate : Update = Update(self.stock, set: stockJson).where("stock.refproduct = '\(productId)' and stock.refstore = '\(storeId)'")
                         connection.execute(query: stockUpdate){ result in
                             if let error = result.asError{
                                 Log.error("\(error)")
                                 errorG = ErrorHandler.DatabaseError(error.localizedDescription)
                             }
-                            Log.info("stock update succeed ")
                         }
                     } else {
                         errorG = ErrorHandler.EmptyBody
@@ -94,9 +93,7 @@ class StockService {
                 }
                 
                 queue.sync {
-                    Log.info("Enter Notify")
                     connection.commit(){ result in
-                        Log.info("\(result),\(result.success)")
                         guard result.success else {
                             connection.rollback(){ rollbackStatus in
                                 completionHandler(nil, ErrorHandler.DatabaseError("Impossible to commit"))
@@ -301,89 +298,86 @@ class StockService {
     }
     
     
-    func getProductInStock(limit:Int = 0, offset:Int = 0, storeId: String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws  {
+    func getProductInStock(limit:Int = 0, offset:Int = 0, storeId: String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws  {
         
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty
         }
         
-       
-        let test : String = "select count(*) from stores"
-        
-        connection.execute(test){result in
-            print(result)
-            connection.execute("select count(*) from stock"){ result in
-                print(result)
+        self.checkIfExist(id: storeId, table: store, column: store.refStore, connection: connection){ exist in
+            
+            if exist == true {
+                do {
+                    let count : Select = Select([ RawField("count(*)")],from: self.stock).where(self.stock.refStore == Parameter())
+                    
+                    let select = Select([ RawField("stock.*"),
+                                          self.product.name.as("product_name"),
+                                          self.product.refProduct.as("product_refproduct"),
+                                          self.product.creationDate.as("product_creationdate"),
+                                          self.product.picture.as("product_picture") ], from: self.stock)
+                                .join(self.product)
+                                .on(self.stock.refProduct == self.product.refProduct)
+                                .where(self.stock.refStore==Parameter())
+                                .order(by: .ASC(self.product.name))
+
+                    var rawQuery : String = ""
+                    
+                    if limit > 0 {
+                        rawQuery = try connection.descriptionOf(query: select.limit(to: limit))
+                    } else if limit < 0 {
+                        oncompletion(nil,ErrorHandler.WrongParameter)
+                    } else {
+                        rawQuery = try connection.descriptionOf(query: select)
+                    }
+                    
+                    if offset > 0 {
+                        rawQuery += " OFFSET \(offset)"
+                    } else if offset < 0 {
+                        oncompletion(nil,ErrorHandler.WrongParameter)
+                    }
+                    
+                    connection.execute(query:count, parameters: [storeId]) { queryResult in
+                        do {
+                            if let count = try queryResult.asResultSet?.singleRow()["count"] as? Int64 {
+                                connection.execute(rawQuery,parameters:[storeId]){ result in
+                                    var dict = ["total":count as Any]
+                                    
+                                    if limit > 0 {
+                                        dict["limit"] = limit
+                                    }
+                                    
+                                    if offset > 0 {
+                                        dict["offset"] = offset
+                                    }
+                                    switch(result){
+                                    case .error(let error):
+                                        oncompletion(nil,error)
+                                    case .resultSet(let resultSet):
+                                        dict["data"] = resultSet.asDictionaries()
+                                        oncompletion(dict,nil)
+                                    case .successNoData:
+                                        dict["data"] = []
+                                        oncompletion(dict, nil)
+                                    default:
+                                        oncompletion(nil,ErrorHandler.UnexpectedDataStructure)
+                                    }
+                                }
+                            } else {
+                                Log.error("failed to retrieve count")
+                                throw ErrorHandler.UnexpectedDataStructure
+                            }
+                        }catch {
+                            oncompletion(nil,error)
+                        }
+                    }             }
+                catch {
+                    oncompletion(nil,error)
+                }
+                
+            } else {
+                oncompletion(nil,ErrorHandler.NothingFound)
             }
         }
-    
-       /* checkIfExist(id: storeId, table: store, column: store.refStore, connection: connection ){ exist in
-            if exist {
-                let query : String = "select count(*) from stores"
-                connection.execute(query){ result in
-                    do {
-                        print(result)
-                        var count = Dictionary<String,Any>()
-                        if let countResponse = try result.asResultSet?.singleRow(),
-                           let countInt = countResponse["count"] as? Int64
-                        {
-                            count["Total"] = Int(countInt)
-                        } else {
-                            Log.error("failed to retrieve count")
-                            throw ErrorHandler.UnexpectedDataStructure
-                        }
-                        
-                        let select = Select(from:self.stock).where(self.stock.refStore == storeId).join(self.product).on(self.stock.refProduct == self.product.refProduct).order(by: .ASC(self.product.name))
-                        
-                        var rawQuery : String = ""
-                        
-                        if limit > 0 {
-                            rawQuery = try connection.descriptionOf(query: select.limit(to: limit))
-                        } else if limit < 0 {
-                            completionHandler(nil,ErrorHandler.WrongParameter)
-                        } else {
-                            rawQuery = try connection.descriptionOf(query: select)
-                        }
-                        
-                        if offset > 0 {
-                            rawQuery += " OFFSET \(offset)"
-                        } else if offset < 0 {
-                            completionHandler(nil,ErrorHandler.WrongParameter)
-                        }
-                        
-                        
-                        connection.execute(rawQuery){ result in
-                            var dict = count
-                            
-                            if limit > 0 {
-                                dict["limit"] = limit
-                            }
-                            
-                            if offset > 0 {
-                                dict["offset"] = offset
-                            }
-                            switch(result){
-                            case .error(let error):
-                                completionHandler(nil,error)
-                            case .resultSet(let resultSet):
-                                dict["data"] = resultSet.asDictionaries()
-                                completionHandler(dict,nil)
-                            case .successNoData:
-                                dict["data"] = []
-                                completionHandler(dict, nil)
-                            default:
-                                completionHandler(nil,ErrorHandler.UnexpectedDataStructure)
-                            }
-                        }
-                    } catch {
-                        completionHandler(nil,error)
-                    }
-                }
-            }
-            else {
-                completionHandler(nil,ErrorHandler.NothingFoundFor("id : \(storeId)"))
-            }
-        } */
     }
     
     func getProductInStock(storeId: String,productId:String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
@@ -392,45 +386,48 @@ class StockService {
             throw ErrorHandler.DBPoolEmpty
         }
         
-        checkIfExist(id: storeId, table: store, column: store.refStore, connection: connection){ exist in
-            if exist{
-                
-                let query = "Select stock.*, products.name as product_name, products.refproduct as product_refproduct, products.creationdate as product_creationdate, products.picture as product_picture from \(self.stock.tableName) inner join \(self.product.tableName) on stock.refproduct=products.refproduct where stock.refstore=$1 and products.refproduct=$2"
-                connection.execute(query,parameters:[storeId,productId]){ result in
-                    switch(result){
-                    case .error(let error):
-                        completionHandler(nil, error)
-                    case .resultSet(let resultSet):
-                        do {
-                            let obj = try resultSet.singleRow()
-                            completionHandler(obj, nil)
-                        } catch {
-                            completionHandler(nil, error)
-                        }
-                    case .successNoData:
-                        completionHandler(nil,ErrorHandler.NothingFound)
-                    default:
-                        completionHandler(nil,ErrorHandler.UnexpectedDataStructure)
-                    }
+        let select = Select([ RawField("stock.*"),
+                              self.product.name.as("product_name"),
+                              self.product.refProduct.as("product_refproduct"),
+                              self.product.creationDate.as("product_creationdate"),
+                              self.product.picture.as("product_picture") ], from: self.stock)
+            .join(self.product)
+            .on(self.stock.refProduct == self.product.refProduct)
+            .where(self.stock.refStore==Parameter() && self.product.refProduct==Parameter())
+        
+        connection.execute(query:select,parameters:[storeId,productId]){ result in
+            switch(result){
+            case .error(let error):
+                completionHandler(nil, error)
+            case .resultSet(let resultSet):
+                do {
+                    let obj = try resultSet.singleRow()
+                    completionHandler(obj, nil)
+                } catch {
+                    completionHandler(nil, error)
                 }
-            } else {
-                completionHandler(nil,ErrorHandler.NothingFoundFor("id : \(storeId)"))
+            case .successNoData:
+                completionHandler(nil,ErrorHandler.NothingFound)
+            default:
+                completionHandler(nil,ErrorHandler.UnexpectedDataStructure)
             }
         }
     }
     
     
-    private func checkIfExist( id: String, table: Table, column: Column, connection: Connection, completionHandler: @escaping (Bool) -> () ) {
-        var bool = false
+    private func checkIfExist( id: String, table: Table, column: Column, connection: Connection, completionHandler: @escaping ( (Bool) -> () ) ){
+        
         let query = "select 1 from \(table.nameInQuery) where \(table.nameInQuery).\(column.name) = '\(id)' limit 1"
         
         connection.execute(query){ result in
-            if (result.asResultSet != nil) {
-                bool = true
+            if result.asRows?.count == 1 {
+                completionHandler(true)
+            } else {
+                completionHandler(false)
             }
-            completionHandler(bool)
         }
     }
+    
     
     private func prepare(json: JSON, required: Bool = true ) -> (product: [(Column,Any)], stock: [(Column,Any)]){
         var arrProduct : [(Column,Any)] = [(Column,Any)]()
