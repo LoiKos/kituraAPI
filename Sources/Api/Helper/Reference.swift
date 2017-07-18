@@ -9,10 +9,10 @@ import Foundation
  Reference can be created with or without a size parameter. The minimum size of the reference is 10 characters and by default the reference is 15 characters.
  */
 
-class Reference {
+open class Reference {
     
     // Singleton
-    static let sharedInstance : Reference = {
+    open static let sharedInstance : Reference = {
         let instance = Reference()
         #if os(Linux)
             srand(UInt32(time(nil)))
@@ -28,19 +28,19 @@ class Reference {
     
     
     /// add a prefix to the next generated reference
-    func prefix(_ prefix: String) -> Reference {
+    open func prefix(_ prefix: String) -> Reference {
         self.prefix = prefix
         return self
     }
     
     /// add a suffix to the next generated reference
-    func suffix(_ suffix: String) -> Reference {
+    open func suffix(_ suffix: String) -> Reference {
         self.suffix = suffix
         return self
     }
     
     /// Default function to generate Reference without specifications. the reference length will be 15 characters.
-    func generateRef() -> String {
+    open func generateRef() -> String {
         var reference = prefix
         
         for _ in 0...14 {
@@ -57,7 +57,7 @@ class Reference {
     }
     
     /// Generate a reference with size specification. Minimum length is 10 characters.
-    func generateRef(size:Int) throws -> String {
+    open func generateRef(size:Int) throws -> String {
         
         guard size > 10 else {
             throw ReferenceError.wrongSize
@@ -79,7 +79,7 @@ class Reference {
     }
     
     /// remove value you could have provide to prefix / suffix
-    private func clear() {
+    internal func clear() {
         if prefix != "" {
             prefix = ""
         }
@@ -91,6 +91,6 @@ class Reference {
 }
 
 // Error Handler for Reference class
-enum ReferenceError : Error{
+public enum ReferenceError : Error{
     case wrongSize
 }

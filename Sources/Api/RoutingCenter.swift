@@ -6,11 +6,11 @@
 //
 //
 
-@_exported import Foundation
-@_exported import Kitura
-@_exported import SwiftyJSON
-@_exported import SwiftKuery
-@_exported import LoggerAPI
+import Foundation
+import Kitura
+import SwiftyJSON
+import SwiftKuery
+import LoggerAPI
 
 public class RoutingCenter {
     

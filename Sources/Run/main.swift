@@ -1,5 +1,6 @@
 import Api
 import HeliumLogger
+import Kitura
 
 // First set Logger to
 let logger = HeliumLogger(.debug)

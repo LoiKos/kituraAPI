@@ -13,70 +13,69 @@ protocol JSONSerializable {
 }
 
 extension String: JSONSerializable {
-
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return "\"\(self)\""
     }
 }
 
 extension Int : JSONSerializable {
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return "\(self)"
     }
 }
 
 extension Date : JSONSerializable {
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return String(describing: self).toJSON()
     }
 }
 
 extension Int8 : JSONSerializable {
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return "\(self)"
     }
 }
 
 extension Int16 : JSONSerializable {
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return "\(self)"
     }
 }
 
 extension Int32 : JSONSerializable {
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return "\(self)"
     }
 }
 
 extension Int64 : JSONSerializable {
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return "\(self)"
     }
 }
 
 // the same as Float
 extension Float32 : JSONSerializable {
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return "\(self)"
     }
 }
 
 // the same as Double
 extension Float64 : JSONSerializable {
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return "\(self)"
     }
 }
 
 extension Float80 : JSONSerializable {
-    func toJSON() -> String {
+    public func toJSON() -> String {
         return "\(self)"
     }
 }
 
 extension Array : JSONSerializable {
-    func toJSON() throws -> String {
+    public func toJSON() throws -> String {
         var out = [String]()
         for item in self {
             if let item = item as? JSONSerializable {
@@ -91,7 +90,7 @@ extension Array : JSONSerializable {
 }
 
 extension Dictionary : JSONSerializable {
-    func toJSON() throws -> String {
+    public func toJSON() throws -> String {
         var out = [String:JSONSerializable]()
         for k in self.keys {
             if let pv = self[k], let v = pv as? JSONSerializable {
