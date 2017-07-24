@@ -12,9 +12,9 @@ import SwiftKueryPostgreSQL
 import LoggerAPI
 
 class Stock : Table {
-    
+
     let tableName = "stock"
-    
+
     let refStore = Column("refStore")
     let refProduct = Column("refProduct")
     let quantity = Column("quantity")
@@ -23,7 +23,7 @@ class Stock : Table {
     let status = Column("status")
     let priceHT = Column("priceHT")
     let vat = Column("vat")
-    
+
     static func prepare(pool:ConnectionPool) throws {
         let query : String = "CREATE TABLE IF NOT EXISTS stock ( refStore varchar(255) NOT NULL REFERENCES stores,"
                            + "refProduct varchar(255) NOT NULL REFERENCES products,"
@@ -34,7 +34,7 @@ class Stock : Table {
                            + "priceHT decimal,"
                            + "vat decimal,"
                            + "PRIMARY KEY (refStore,refProduct) );"
-        
+
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty
         }
@@ -48,4 +48,3 @@ class Stock : Table {
         }
     }
 }
-

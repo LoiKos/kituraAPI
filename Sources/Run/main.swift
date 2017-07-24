@@ -1,7 +1,8 @@
 import Api
 import HeliumLogger
 import Kitura
-
+import Foundation
+import LoggerAPI
 // First set Logger to
 let logger = HeliumLogger(.debug)
 logger.colored = true
@@ -16,4 +17,3 @@ let server = Kitura.addHTTPServer(onPort:port, with: center.setup())
 
 // Run the server
 Kitura.run()
-
