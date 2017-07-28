@@ -39,7 +39,7 @@ class ReferenceTests: XCTestCase {
     }
     
     func testCustomReferenceFailed(){
-        XCTAssertThrowsError(try Reference.sharedInstance.generateRef(size: 9),""){ error in
+        XCTAssertThrowsError(try Reference.sharedInstance.generateRef(size: 9)){ error in
             XCTAssert(error is ReferenceError)
             XCTAssert(error as! ReferenceError == ReferenceError.wrongSize)
         }
@@ -64,14 +64,41 @@ class ReferenceTests: XCTestCase {
     }
     
     
-//    func testPerformanceExample() {
-//        self.measure {
-//            // Put the code you want to measure the time of here.
-//            for time in 0...1000 {
-//                Reference.sharedInstance.generateRef()
-//            }
-//        }
-//    }
+    func testSimpleRefPerformance() {
+        self.measure {
+            for _ in 0...1000 {
+                _ = Reference.sharedInstance.generateRef()
+            }
+        }
+    }
+    
+    func testCustomRefPerformance() {
+        self.measure {
+            for _ in 0...1000 {
+                do {
+                   _ = try Reference.sharedInstance.generateRef(size: 30)
+                } catch {
+                    exit(0)
+                }
+            }
+        }
+    }
+    
+    func testSuffixPerformanceSimple() {
+        self.measure {
+            for _ in 0...1000 {
+                _ = Reference.sharedInstance.suffix("_FR").generateRef()
+            }
+        }
+    }
+    
+    func testPrefixPerformanceSimple() {
+        self.measure {
+            for _ in 0...1000 {
+                _ = Reference.sharedInstance.prefix("FR_").generateRef()
+            }
+        }
+    }
     
     static var allTests : [(String, (ReferenceTests) -> () throws -> Void)] {
         return [
