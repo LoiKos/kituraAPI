@@ -10,6 +10,7 @@ import Foundation
 import SwiftKueryPostgreSQL
 import SwiftKuery
 
+import LoggerAPI
 
 
 struct Database {
@@ -46,5 +47,35 @@ struct Database {
         try Store.prepare(pool:self.pool)
         try Product.prepare(pool:self.pool)
         try Stock.prepare(pool:self.pool)
+    }
+    
+    func drop(completionHandler:(@escaping (Error?) -> ())){
+        guard let connection = pool.getConnection() else {
+            completionHandler(ErrorHandler.DBPoolEmpty)
+            return
+        }
+        
+        Stock().drop().execute(connection){ result in
+            guard result.success else {
+                Log.error(String(describing:result.asError))
+                completionHandler(result.asError)
+                return
+            }
+            Product().drop().execute(connection){ result in
+                guard result.success else {
+                    Log.error(String(describing:result.asError))
+                    completionHandler(result.asError)
+                    return
+                }
+            }
+            Store().drop().execute(connection){ result in
+                guard result.success else {
+                    Log.error(String(describing:result.asError))
+                    completionHandler(result.asError)
+                    return
+                }
+                completionHandler(nil)
+            }
+        }
     }
 }
