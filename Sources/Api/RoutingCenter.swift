@@ -19,8 +19,8 @@ public class RoutingCenter {
     
     public init() throws {
         let database = try Database()
-        try database.preparation()
         self.pool = database.pool
+        try database.preparation()
         self.router = Router()
     }
     

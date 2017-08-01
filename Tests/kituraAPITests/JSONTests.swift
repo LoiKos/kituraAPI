@@ -77,10 +77,52 @@ class JSONTests: XCTestCase {
         }
     }
     
+    func testJsonArrayPerformances(){
+        let date = Date()
+        let array : [Any] = ["toto", 10, 10.99, date]
+        
+        self.measure {
+            do {
+                for _ in 0...1000 {
+                    _ = try array.toJSON()
+                }
+            } catch {
+                print("array to json performance test failed because \(error)")
+            }
+        }
+    }
+    
     func testDictionnary(){
         let date = Date()
         let dict = ["string":"toto","number":10,"float":10.0,"date":date,"array":["test"]] as [String : Any]
-        XCTAssertNoThrow(try dict.toJSON())
+        XCTAssertNoThrow(XCTAssert(try dict.toJSON().contains("\"string\":\"toto\"")))
+        XCTAssertNoThrow(XCTAssert(try dict.toJSON().contains("\"number\":10")))
+        XCTAssertNoThrow(XCTAssert(try dict.toJSON().contains("\"float\":10.0")))
+        XCTAssertNoThrow(XCTAssert(try dict.toJSON().contains("\"date\":\"\(date)\"")))
+        XCTAssertNoThrow(XCTAssert(try dict.toJSON().contains("\"array\":[\"test\"]")))
     }
-    func testDictionnaryFailed(){}
+    
+    func testDictionnaryFailed(){
+        let tuple : (String,Date) = ("toto",Date())
+        let dict = ["string":"toto","number":10,"float":10.0,"UnserializeType":tuple] as [String : Any]
+        XCTAssertThrowsError( try dict.toJSON() ){ error in
+            XCTAssert(error is JSONSerializableError)
+            XCTAssert(error as? JSONSerializableError == JSONSerializableError.typeUnSerializable)
+        }
+    }
+    
+    func testJsonDictionaryPerformances(){
+        let date = Date()
+        let dict = ["string":"toto","number":10,"float":10.0,"date":date,"array":["test"]] as [String : Any]
+        
+        self.measure {
+            for _ in 0...1000{
+                do {
+                  _ = try dict.toJSON()
+                } catch {
+                    print("dictionary to json performance test failed because \(error)")
+                }
+            }
+        }
+    }
 }
