@@ -57,26 +57,52 @@ struct Database {
             return
         }
         
-        Stock().drop().execute(connection){ result in
-            guard result.success else {
-                Log.error(String(describing:result.asError))
-                completionHandler(result.asError)
-                return
-            }
-            Product().drop().execute(connection){ result in
+        connection.startTransaction(){ result in
+            Stock().drop().execute(connection){ result in
                 guard result.success else {
-                    Log.error(String(describing:result.asError))
-                    completionHandler(result.asError)
+                    let error = result.asError
+                    connection.rollback(){ result in
+                        guard result.success else {
+                            completionHandler(result.asError)
+                            return
+                        }
+                        completionHandler(error)
+                    }
                     return
                 }
-            }
-            Store().drop().execute(connection){ result in
-                guard result.success else {
-                    Log.error(String(describing:result.asError))
-                    completionHandler(result.asError)
-                    return
+                Product().drop().execute(connection){ result in
+                    guard result.success else {
+                        let error = result.asError
+                        connection.rollback(){ result in
+                            guard result.success else {
+                                completionHandler(result.asError)
+                                return
+                            }
+                            completionHandler(error)
+                        }
+                        return
+                    }
+                    Store().drop().execute(connection){ result in
+                        guard result.success else {
+                            let error = result.asError
+                            connection.rollback(){ result in
+                                guard result.success else {
+                                    completionHandler(result.asError)
+                                    return
+                                }
+                                completionHandler(error)
+                            }
+                            return
+                        }
+                        connection.commit(){ result in
+                            guard result.success else {
+                                completionHandler(result.asError)
+                                return
+                            }
+                            completionHandler(nil)
+                        }
+                    }
                 }
-                completionHandler(nil)
             }
         }
     }
