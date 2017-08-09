@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import SwiftKueryPostgreSQL
 @testable import Api
 
 class HelperTests: XCTestCase {
