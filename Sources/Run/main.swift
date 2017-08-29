@@ -4,9 +4,10 @@ import Kitura
 import Foundation
 import LoggerAPI
 // First set Logger to
-let logger = HeliumLogger(.debug)
+let logger = HeliumLogger(.warning)
 logger.colored = true
 Log.logger = logger
+
 
 let center : RoutingCenter = try RoutingCenter()
 
