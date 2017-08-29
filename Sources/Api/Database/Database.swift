@@ -9,16 +9,15 @@
 import Foundation
 import SwiftKueryPostgreSQL
 import SwiftKuery
-
-
+import LoggerAPI
 
 struct Database {
 
-    private var host : String = "127.0.0.1"
-    private var port : Int32 = 5432
-    private var databaseName : String = "postgres"
-    private var userName : String = "postgres"
-    private var password : String = ""
+    private var host : String
+    private var port : Int32
+    private var databaseName : String
+    private var userName : String
+    private var password : String
 
     public var pool: ConnectionPool
 
@@ -38,13 +37,47 @@ struct Database {
         self.databaseName = database
         self.userName = userName
         self.password = password
-
+        
+        /*  This configuration is classic but offers a powerful pool and good performances. 
+            PostgreSQL max connections = 100 
+            you should avoid the use of large pool and prefer set a timeout a bit longer. 
+            Keeping a good ratio between timeout and maxCapacity to reach the best concurrency possible. */
         pool = PostgreSQLConnection.createPool(host: self.host, port: self.port, options: [.userName(self.userName),.password(self.password),.databaseName(self.databaseName)], poolOptions:  ConnectionPoolOptions(initialCapacity: 1, maxCapacity: 10, timeout: 30000))
     }
 
-    func preparation() throws {
+    func preparation() throws {        
+        try Product.prepare(pool: self.pool)
         try Store.prepare(pool:self.pool)
-        try Product.prepare(pool:self.pool)
         try Stock.prepare(pool:self.pool)
+    }
+    
+    func drop(completionHandler:(@escaping (Error?) -> ())){
+        guard let connection = pool.getConnection() else {
+            completionHandler(ErrorHandler.DBPoolEmpty)
+            return
+        }
+        
+        Stock().drop().execute(connection){ result in
+            guard result.success else {
+                Log.error(String(describing:result.asError))
+                completionHandler(result.asError)
+                return
+            }
+            Product().drop().execute(connection){ result in
+                guard result.success else {
+                    Log.error(String(describing:result.asError))
+                    completionHandler(result.asError)
+                    return
+                }
+            }
+            Store().drop().execute(connection){ result in
+                guard result.success else {
+                    Log.error(String(describing:result.asError))
+                    completionHandler(result.asError)
+                    return
+                }
+                completionHandler(nil)
+            }
+        }
     }
 }

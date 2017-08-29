@@ -3,7 +3,7 @@ import HeliumLogger
 import Kitura
 import Foundation
 import LoggerAPI
-// First set Logger to
+
 let logger = HeliumLogger(.warning)
 logger.colored = true
 Log.logger = logger
