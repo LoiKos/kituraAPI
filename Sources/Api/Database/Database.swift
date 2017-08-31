@@ -22,7 +22,6 @@ struct Database {
     public var pool: ConnectionPool
 
     init() throws {
-
         guard let host = ProcessInfo.processInfo.environment["DATABASE_HOST"],
             let port_string = ProcessInfo.processInfo.environment["DATABASE_PORT"],
             let port = Int32(port_string),
@@ -99,6 +98,7 @@ struct Database {
                                 completionHandler(result.asError)
                                 return
                             }
+                            Log.info("Tables Created")
                             completionHandler(nil)
                         }
                     }
