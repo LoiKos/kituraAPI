@@ -13,22 +13,24 @@ import LoggerAPI
 import SwiftKuery
 import SwiftyJSON
 
-class StockService {
+class StockService : Pivot {
     
-    let product = Product()
-    let stock = Stock()
-    let store = Store()
-    
+    let product : Product
+    let stock : Stock
+    let store : Store
     let ref : Reference
     let pool : ConnectionPool
     
     init(pool:ConnectionPool) {
         self.ref = Reference.sharedInstance
         self.pool = pool
+        self.product = Product()
+        self.stock = Stock()
+        self.store = Store()
     }
     
     
-    func updateProductInStock (storeId: String, productId: String, body: JSON, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
+    func update(storeId: String, productId: String, body: JSON, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
         
         guard !body.isEmpty else {
             throw ErrorHandler.EmptyBody
@@ -99,7 +101,7 @@ class StockService {
                         }
                         connection.closeConnection()
                         do {
-                            try self.getProductInStock(storeId: storeId, productId: productId){ dictionary, error in
+                            try self.getOne(storeId: storeId, productId: productId){ dictionary, error in
                                 completionHandler(dictionary, error)
                             }
                         } catch {
@@ -116,7 +118,7 @@ class StockService {
         }
     }
     
-    func deleteProductInStock (storeId: String, productId: String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
+    func delete (storeId: String, productId: String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
         
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty
@@ -202,7 +204,7 @@ class StockService {
         }
     }
     
-    func createProductInStock (storeId: String, requestBody: JSON, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
+    func create(storeId: String, requestBody: JSON, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
         
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty
@@ -294,7 +296,7 @@ class StockService {
     }
     
     
-    func getProductInStock(limit:Int = 0, offset:Int = 0, storeId: String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws  {
+    func all(limit:Int = 0, offset:Int = 0, storeId: String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws  {
         
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty
@@ -376,7 +378,7 @@ class StockService {
         }
     }
     
-    func getProductInStock(storeId: String,productId:String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
+    func getOne(storeId: String,productId:String, completionHandler: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
         
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty

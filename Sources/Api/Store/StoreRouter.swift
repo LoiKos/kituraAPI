@@ -12,16 +12,14 @@ import SwiftKuery
 import LoggerAPI
 import SwiftyJSON
 
-
-
 public class StoreRouter {
 
-    let service : StoreService
+    private let service : Service
 
     public let router: Router
 
-    init(pool:ConnectionPool)  {
-        service = StoreService(pool:pool)
+    init(_ service:Service)  {
+        self.service = service
         router = Router()
         setupRoutes()
     }
@@ -37,7 +35,7 @@ public class StoreRouter {
 
     private func getStoreById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         if let id = request.parameters["id"] {
-            try service.findById(id: id) { result, error in
+            try service.getOne(id: id) { result, error in
                 response.status(.OK)
                 handleCompletion(result: result, error: error, response: response, next: next)
             }
@@ -54,7 +52,7 @@ public class StoreRouter {
 
             switch parsedBody {
                 case .json(let jsonBody):
-                    try service.updateById(id: id, jsonBody: jsonBody) { result, error in
+                    try service.update(id: id, jsonBody: jsonBody) { result, error in
                         response.status(.OK)
                         handleCompletion(result:result, error: error,response: response,next: next)
                     }
@@ -68,7 +66,7 @@ public class StoreRouter {
 
     private func deleteStoreById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         if let id = request.parameters["id"] {
-            try service.deleteById(id: id) { result, error in
+            try service.delete(id: id) { result, error in
                 response.status(.OK)
                 handleCompletion(result: result, error: error, response: response, next: next)
             }
@@ -90,7 +88,7 @@ public class StoreRouter {
             limit = Int(paramLimit) ?? 0
         }
 
-        try service.findAll(limit: limit, offset: offset) { result, error in
+        try service.all(limit: limit, offset: offset) { result, error in
             response.status(.OK)
             handleCompletion(result: result, error: error, response: response, next: next)
         }

@@ -8,11 +8,9 @@
 
 import Foundation
 import Kitura
-import SwiftyJSON
 import SwiftKuery
-import LoggerAPI
 
-public class RoutingCenter {
+final public class RoutingCenter {
     
     private let pool : ConnectionPool
     private let router : Router
@@ -31,37 +29,18 @@ public class RoutingCenter {
             try response.send(status: .notFound).end()
         }
         
-        let stockRouter = StockRouter(pool:pool).router
+        let stockService = StockService(pool: pool)
+        let stockRouter = StockRouter(stockService).router
         router.all("/api/v1/stores/:storeId/products", middleware: stockRouter)
         
-        let storeRouter = StoreRouter(pool:pool).router
+        let storeService = StoreService(pool: pool)
+        let storeRouter = StoreRouter(storeService).router
         router.all("/api/v1/stores", middleware: storeRouter)
         
-        let productRouter = ProductRouter(pool:pool).router
+        let productService = ProductService(pool: pool)
+        let productRouter = ProductRouter(productService).router
         router.all("/api/v1/products", middleware: productRouter)
         
         return router
-    }
-}
-
-func handleCompletion(result: Dictionary<String,Any>?, error:Error?, response: RouterResponse, next: @escaping () -> Void){
-    guard error == nil else {
-        Log.error("\(error.debugDescription)")
-        response.error = error
-        next()
-        return
-    }
-
-    guard let responseBody = result  else {
-        Log.error("Impossible to retrieve results")
-        response.error = ErrorHandler.UnknowError
-        next()
-        return
-    }
-    
-    do{
-        try response.send(json: JSON.parse(string: try responseBody.toJSON())).end()
-    } catch {
-        Log.error("Impossible to send response : \(error)")
     }
 }

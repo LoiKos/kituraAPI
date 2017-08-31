@@ -14,12 +14,11 @@ import SwiftyJSON
 
 public class ProductRouter {
     
-    let service : ProductService
-    
+    let service : Service
     public let router: Router
     
-    init(pool:ConnectionPool) {
-        service = ProductService(pool:pool)
+    init(_ service:Service) {
+        self.service = service
         router = Router()
         setupRoutes()
     }
@@ -36,7 +35,7 @@ public class ProductRouter {
     
     private func getProductById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         if let id = request.parameters["id"] {
-            try service.findById(id: id) { result, error in
+            try service.getOne(id: id) { result, error in
                 response.status(.OK)
                 handleCompletion(result: result, error: error, response: response, next: next)
             }
@@ -53,7 +52,7 @@ public class ProductRouter {
             
             switch parsedBody {
                 case .json(let jsonBody):
-                    try service.updateById(id: id, jsonBody: jsonBody) { result, error in
+                    try service.update(id: id, jsonBody: jsonBody) { result, error in
                         response.status(.OK)
                         handleCompletion(result:result, error: error,response: response,next: next)
                     }
@@ -67,7 +66,7 @@ public class ProductRouter {
     
     private func deleteProductById(request: RouterRequest, response: RouterResponse, next: @escaping () -> Void) throws {
         if let id = request.parameters["id"] {
-            try service.deleteById(id: id) { result, error in
+            try service.delete(id: id) { result, error in
                 response.status(.OK)
                 handleCompletion(result: result, error: error, response: response, next: next)
             }
@@ -89,7 +88,7 @@ public class ProductRouter {
             limit = Int(paramLimit) ?? 0
         }
         
-        try service.findAll(limit: limit, offset: offset) { result, error in
+        try service.all(limit: limit, offset: offset) { result, error in
             response.status(.OK)
             handleCompletion(result: result, error: error, response: response, next: next)
         }

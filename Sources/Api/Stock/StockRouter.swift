@@ -16,12 +16,11 @@ import SwiftyJSON
 
 public class StockRouter {
     
-    let service : StockService
-    
+    let service : Pivot
     public let router: Router
     
-    init(pool:ConnectionPool)  {
-        service = StockService(pool:pool)
+    init(_ service: Pivot)  {
+        self.service = service
         router = Router(mergeParameters: true)
         setupRoutes()
     }
@@ -42,7 +41,7 @@ public class StockRouter {
                 throw ErrorHandler.badRequest
         }
         
-        try service.getProductInStock(storeId: store, productId: product, completionHandler: { result, error in
+        try service.getOne(storeId: store, productId: product, completionHandler: { result, error in
             handleCompletion(result: result, error: error, response: response, next: next)
         })
     }
@@ -59,7 +58,7 @@ public class StockRouter {
         
         switch parsedBody {
             case .json(let jsonBody):
-                try service.updateProductInStock(storeId: store, productId: product, body: jsonBody){ result, error in
+                try service.update(storeId: store, productId: product, body: jsonBody){ result, error in
                     handleCompletion(result: result, error: error, response: response, next: next)
             }
             default:
@@ -74,7 +73,7 @@ public class StockRouter {
             throw ErrorHandler.badRequest
         }
         
-        try service.deleteProductInStock(storeId: store, productId: product){result, error in
+        try service.delete(storeId: store, productId: product){result, error in
             handleCompletion(result: result, error: error, response: response, next: next)
         }
     }
@@ -95,7 +94,7 @@ public class StockRouter {
             limit = Int(paramLimit) ?? 0
         }
         
-        try service.getProductInStock(limit:limit, offset:offset, storeId: store){ result, error in
+        try service.all(limit:limit, offset:offset, storeId: store){ result, error in
             handleCompletion(result: result, error: error, response: response, next: next)
         }
     }
@@ -112,7 +111,7 @@ public class StockRouter {
         
         switch parsedBody {
             case .json(let jsonBody):
-                try service.createProductInStock(storeId: store, requestBody: jsonBody) { result, error in
+                try service.create(storeId: store, requestBody: jsonBody) { result, error in
                     response.status(.created)
                     handleCompletion(result: result, error: error, response: response, next: next)
             }

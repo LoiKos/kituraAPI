@@ -12,15 +12,16 @@ import LoggerAPI
 import SwiftKuery
 import SwiftyJSON
 
-class StoreService {
+class StoreService : Service {
     
-    let store = Store()
+    let store : Store
     let ref : Reference
     let pool : ConnectionPool
     
     init(pool:ConnectionPool) {
         self.ref = Reference.sharedInstance
         self.pool = pool
+        self.store = Store()
     }
     
     func create(body:JSON, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
@@ -76,7 +77,7 @@ class StoreService {
     }
     
     
-    func findAll(limit:Int = 0, offset:Int = 0, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
+    func all(limit:Int = 0, offset:Int = 0, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
         
         let query : Select = Select(from: store).order(by: .ASC(store.name))
         var rawQuery : String = ""
@@ -146,7 +147,7 @@ class StoreService {
     
     
     
-    func findById(id:String, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
+    func getOne(id:String, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
         let select = Select(from:store).where(store.refStore == id)
         
         guard let connection = pool.getConnection() else {
@@ -172,7 +173,7 @@ class StoreService {
         }
     }
     
-    func updateById(id: String, jsonBody: JSON, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
+    func update(id: String, jsonBody: JSON, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty
         }
@@ -227,7 +228,7 @@ class StoreService {
         }
     }
     
-    func deleteById(id:String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
+    func delete(id:String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
        
         let delete = Delete(from: store).where(store.refStore == id).suffix("RETURNING *")
         
