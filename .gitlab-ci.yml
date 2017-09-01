@@ -1,11 +1,5 @@
 before_script:
 
-page:
-    artifacts:
-     paths:
-      - docs
-
-    
 build:
     script:
         - swift build -c release
