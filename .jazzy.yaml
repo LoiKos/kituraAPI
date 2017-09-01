@@ -1,0 +1,7 @@
+module: Api
+author: LoiKos
+
+clean: true
+exclude: [Packages]
+
+xcodebuild_arguments: [-project, kituraMbao.xcodeproj, -target, Api, LIBRARY_SEARCH_PATHS=.build/debug]

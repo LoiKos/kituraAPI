@@ -12,7 +12,7 @@ import LoggerAPI
 import SwiftKuery
 import SwiftyJSON
 
-class ProductService {
+class ProductService : Service {
     
     let product = Product()
     let ref : Reference
@@ -67,7 +67,7 @@ class ProductService {
         }
     }
     
-    func findAll(limit:Int = 0, offset:Int = 0, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
+    func all(limit:Int = 0, offset:Int = 0, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
         
         let query : Select = Select(from: product).order(by: .ASC(product.name))
         var rawQuery : String = ""
@@ -135,7 +135,7 @@ class ProductService {
         }
     }
     
-    func findById(id:String, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
+    func getOne(id:String, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
         let select = Select(from:product).where(product.refProduct == id)
         
         guard let connection = pool.getConnection() else {
@@ -162,7 +162,7 @@ class ProductService {
         }
     }
     
-    func updateById(id: String, jsonBody: JSON, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
+    func update(id: String, jsonBody: JSON, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty
         }
@@ -208,7 +208,7 @@ class ProductService {
         }
     }
     
-    func deleteById(id:String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
+    func delete(id:String, oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) throws {
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty
         }

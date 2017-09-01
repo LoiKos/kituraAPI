@@ -7,7 +7,10 @@
 //
 
 import Foundation
+import Kitura
 import SwiftKuery
+import SwiftyJSON
+import LoggerAPI
 
 #if os(Linux)
   import Glibc
@@ -45,5 +48,30 @@ extension ResultSet {
             
             return object
         }
+    }
+}
+
+
+func handleCompletion(result: Dictionary<String,Any>?, error:Error?, response: RouterResponse, next: @escaping () -> Void){
+    
+    guard error == nil else {
+        Log.error("\(error.debugDescription)")
+        response.error = error
+        next()
+        return
+    }
+    
+    guard let responseBody = result  else {
+        Log.error("Impossible to retrieve results")
+        response.error = ErrorHandler.UnknowError
+        next()
+        return
+    }
+    
+    do{
+        try response.send(json: JSON.parse(string: try responseBody.toJSON())).end()
+    } catch {
+        print("Impossible to send response : \(error)")
+        Log.error("Impossible to send response : \(error)")
     }
 }
