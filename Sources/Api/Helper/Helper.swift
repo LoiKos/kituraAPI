@@ -19,8 +19,11 @@ import LoggerAPI
 extension ResultSet {
     /**
         Retrieve a single row from a Query result (Swift-Kuery) ResultSet
+        - throws: ErrorHandler.UnexpectedDataStructure
+        - returns: Dictionary<String,Any>
+        - Author : LoiKos
      */
-    func singleRow() throws -> Dictionary<String,Any> {
+    public func singleRow() throws -> Dictionary<String,Any> {
         var mainRow:Dictionary<String,Any> = Dictionary<String,Any>()
         
         for item in self.rows {
@@ -36,9 +39,11 @@ extension ResultSet {
     }
     
     /**
-     
+        Convert ResultSet to array of dictionnary
+        - returns: [Dictionary<String,Any>]
+        - Author : LoiKos
      */
-    func asDictionaries() -> [ Dictionary<String,Any> ] {
+    public func asDictionaries() -> [ Dictionary<String,Any> ] {
         return self.rows.map { row in
             var object = Dictionary<String,Any>()
             

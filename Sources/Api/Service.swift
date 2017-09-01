@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 
+
 protocol Service {
     
     func all(limit:Int, offset:Int, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws

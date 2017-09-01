@@ -20,7 +20,7 @@ import LoggerAPI
  - Version: 1.0
  */
 
-enum ErrorHandler : Error, CustomStringConvertible {
+public enum ErrorHandler : Error, CustomStringConvertible {
     
     case WrongType
     case EmptyBody
@@ -36,7 +36,7 @@ enum ErrorHandler : Error, CustomStringConvertible {
     case badRequest
     case DBPoolEmpty
     
-    var description: String {
+    public var description: String {
         switch self {
         case .WrongType:
             return "Body need to be in JSON. Check that header contains Content-type: application/json"

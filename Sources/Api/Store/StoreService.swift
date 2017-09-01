@@ -76,7 +76,6 @@ class StoreService : Service {
         }
     }
 
-
     func all(limit:Int = 0, offset:Int = 0, oncompletion: @escaping (Dictionary<String,Any>?, Error?) -> ()) throws {
 
         let query : Select = Select(from: store).order(by: .ASC(store.name))

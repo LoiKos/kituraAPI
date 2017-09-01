@@ -1,6 +1,160 @@
 {
   "warnings": [
     {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Database/Database.swift",
+      "line": 14,
+      "symbol": "Database",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Database/Database.swift",
+      "line": 22,
+      "symbol": "Database.pool",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Database/Database.swift",
+      "line": 24,
+      "symbol": "Database.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Database/Database.swift",
+      "line": 47,
+      "symbol": "Database.preparation()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Database/Database.swift",
+      "line": 53,
+      "symbol": "Database.drop(completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 25,
+      "symbol": "ErrorHandler.WrongType",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 26,
+      "symbol": "ErrorHandler.EmptyBody",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 27,
+      "symbol": "ErrorHandler.MissingRequireProperty",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 28,
+      "symbol": "ErrorHandler.UnknowError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 29,
+      "symbol": "ErrorHandler.WrongParameter",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 30,
+      "symbol": "ErrorHandler.NothingToUpdate",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 31,
+      "symbol": "ErrorHandler.DatabaseError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 32,
+      "symbol": "ErrorHandler.ParsingResponse",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 33,
+      "symbol": "ErrorHandler.NothingFoundFor",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 34,
+      "symbol": "ErrorHandler.NothingFound",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 35,
+      "symbol": "ErrorHandler.UnexpectedDataStructure",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 36,
+      "symbol": "ErrorHandler.badRequest",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 37,
+      "symbol": "ErrorHandler.DBPoolEmpty",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/ErrorHandler.swift",
+      "line": 82,
+      "symbol": "ErrorHandler.toJSON()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Helper/Helper.swift",
+      "line": 60,
+      "symbol": "handleCompletion(result:error:response:next:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Helper/JSON.swift",
+      "line": 11,
+      "symbol": "JSONSerializable",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Helper/JSON.swift",
+      "line": 12,
+      "symbol": "JSONSerializable.toJSON()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Helper/JSON.swift",
       "line": 16,
       "symbol": "String.toJSON()",
@@ -85,6 +239,27 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Helper/JSON.swift",
+      "line": 108,
+      "symbol": "JSONSerializableError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Helper/JSON.swift",
+      "line": 109,
+      "symbol": "JSONSerializableError.typeUnSerializable",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Helper/JSON.swift",
+      "line": 110,
+      "symbol": "JSONSerializableError.notConvertible",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Helper/Reference.swift",
       "line": 15,
       "symbol": "Reference.sharedInstance",
@@ -106,6 +281,55 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/Product.swift",
+      "line": 16,
+      "symbol": "Product",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/Product.swift",
+      "line": 18,
+      "symbol": "Product.tableName",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/Product.swift",
+      "line": 20,
+      "symbol": "Product.refProduct",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/Product.swift",
+      "line": 21,
+      "symbol": "Product.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/Product.swift",
+      "line": 22,
+      "symbol": "Product.picture",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/Product.swift",
+      "line": 23,
+      "symbol": "Product.creationDate",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/Product.swift",
+      "line": 25,
+      "symbol": "Product.prepare(pool:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductRouter.swift",
       "line": 15,
       "symbol": "ProductRouter",
@@ -114,30 +338,261 @@
     },
     {
       "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductRouter.swift",
-      "line": 19,
+      "line": 17,
+      "symbol": "ProductRouter.service",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductRouter.swift",
+      "line": 18,
       "symbol": "ProductRouter.router",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/RoutingCenter.swift",
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductRouter.swift",
+      "line": 20,
+      "symbol": "ProductRouter.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
       "line": 15,
+      "symbol": "ProductService",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
+      "line": 17,
+      "symbol": "ProductService.product",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
+      "line": 18,
+      "symbol": "ProductService.ref",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
+      "line": 19,
+      "symbol": "ProductService.pool",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
+      "line": 21,
+      "symbol": "ProductService.init(pool:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
+      "line": 26,
+      "symbol": "ProductService.create(body:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
+      "line": 70,
+      "symbol": "ProductService.all(limit:offset:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
+      "line": 138,
+      "symbol": "ProductService.getOne(id:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
+      "line": 165,
+      "symbol": "ProductService.update(id:jsonBody:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Product/ProductService.swift",
+      "line": 211,
+      "symbol": "ProductService.delete(id:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/RoutingCenter.swift",
+      "line": 13,
       "symbol": "RoutingCenter",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/RoutingCenter.swift",
-      "line": 20,
-      "symbol": "RoutingCenter.init()",
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 13,
+      "symbol": "Service",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 15,
+      "symbol": "Service.all(limit:offset:oncompletion:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/RoutingCenter.swift",
-      "line": 27,
-      "symbol": "RoutingCenter.setup()",
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 17,
+      "symbol": "Service.create(body:oncompletion:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 19,
+      "symbol": "Service.update(id:jsonBody:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 21,
+      "symbol": "Service.getOne(id:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 23,
+      "symbol": "Service.delete(id:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 27,
+      "symbol": "Pivot",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 29,
+      "symbol": "Pivot.all(limit:offset:storeId:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 31,
+      "symbol": "Pivot.create(storeId:requestBody:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 33,
+      "symbol": "Pivot.update(storeId:productId:body:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 35,
+      "symbol": "Pivot.getOne(storeId:productId:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Service.swift",
+      "line": 37,
+      "symbol": "Pivot.delete(storeId:productId:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 14,
+      "symbol": "Stock",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 16,
+      "symbol": "Stock.tableName",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 18,
+      "symbol": "Stock.refStore",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 19,
+      "symbol": "Stock.refProduct",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 20,
+      "symbol": "Stock.quantity",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 21,
+      "symbol": "Stock.creationDate",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 22,
+      "symbol": "Stock.lastUpdate",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 23,
+      "symbol": "Stock.status",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 24,
+      "symbol": "Stock.priceHT",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 25,
+      "symbol": "Stock.vat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/Stock.swift",
+      "line": 27,
+      "symbol": "Stock.prepare(pool:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
@@ -149,23 +604,261 @@
     },
     {
       "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockRouter.swift",
-      "line": 21,
+      "line": 19,
+      "symbol": "StockRouter.service",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockRouter.swift",
+      "line": 20,
       "symbol": "StockRouter.router",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockRouter.swift",
+      "line": 22,
+      "symbol": "StockRouter.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 16,
+      "symbol": "StockService",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 18,
+      "symbol": "StockService.product",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 19,
+      "symbol": "StockService.stock",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 20,
+      "symbol": "StockService.store",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 21,
+      "symbol": "StockService.ref",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 22,
+      "symbol": "StockService.pool",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 24,
+      "symbol": "StockService.init(pool:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 33,
+      "symbol": "StockService.update(storeId:productId:body:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 121,
+      "symbol": "StockService.delete(storeId:productId:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 207,
+      "symbol": "StockService.create(storeId:requestBody:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 299,
+      "symbol": "StockService.all(limit:offset:storeId:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Stock/StockService.swift",
+      "line": 381,
+      "symbol": "StockService.getOne(storeId:productId:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/Store.swift",
+      "line": 16,
+      "symbol": "Store",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/Store.swift",
+      "line": 18,
+      "symbol": "Store.tableName",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/Store.swift",
+      "line": 20,
+      "symbol": "Store.refStore",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/Store.swift",
+      "line": 21,
+      "symbol": "Store.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/Store.swift",
+      "line": 22,
+      "symbol": "Store.picture",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/Store.swift",
+      "line": 23,
+      "symbol": "Store.vat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/Store.swift",
+      "line": 24,
+      "symbol": "Store.currency",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/Store.swift",
+      "line": 25,
+      "symbol": "Store.merchantKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/Store.swift",
+      "line": 27,
+      "symbol": "Store.prepare(pool:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreRouter.swift",
-      "line": 17,
+      "line": 15,
       "symbol": "StoreRouter",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreRouter.swift",
-      "line": 21,
+      "line": 19,
       "symbol": "StoreRouter.router",
       "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreRouter.swift",
+      "line": 21,
+      "symbol": "StoreRouter.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 15,
+      "symbol": "StoreService",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 17,
+      "symbol": "StoreService.store",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 18,
+      "symbol": "StoreService.ref",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 19,
+      "symbol": "StoreService.pool",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 21,
+      "symbol": "StoreService.init(pool:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 27,
+      "symbol": "StoreService.create(body:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 80,
+      "symbol": "StoreService.all(limit:offset:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 149,
+      "symbol": "StoreService.getOne(id:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 176,
+      "symbol": "StoreService.update(id:jsonBody:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/loikos/Documents/Orange/workspace/kituraAPI/Sources/Api/Store/StoreService.swift",
+      "line": 231,
+      "symbol": "StoreService.delete(id:oncompletion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     }
   ],
