@@ -1,0 +1,10 @@
+before_script:
+    
+    
+build:
+    script:
+        - swift build -c release
+        
+test:
+    script:
+        - swift test -c release
