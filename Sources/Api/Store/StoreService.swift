@@ -85,64 +85,63 @@ class StoreService : Service {
         guard let connection = pool.getConnection() else {
             throw ErrorHandler.DBPoolEmpty
         }
-
-        if limit > 0 {
-            rawQuery = try connection.descriptionOf(query: query.limit(to: limit))
-        } else if limit < 0 {
-            throw ErrorHandler.WrongParameter
-        } else {
-            rawQuery = try connection.descriptionOf(query: query)
-        }
         
-        if offset > 0 {
-            rawQuery += " OFFSET \(offset)"
-        } else if offset < 0 {
-            throw ErrorHandler.WrongParameter
-        }
-        
-        count(connection: connection){ countResult, errorCount in
-            guard let numberElement = countResult?["count"] else {
-                if let error = errorCount {
-                    oncompletion(nil, error)
-                } else {
-                    oncompletion(nil, ErrorHandler.DatabaseError("Impossible to retrieve database response"))
-                }
-                return
+        connection.startTransaction(){ result in
+            guard result.success else {
+                return oncompletion(nil,result.asError)
             }
             
-            connection.execute(rawQuery){ result in
-                switch result {
-                    case .error(let error):
-                        oncompletion( nil, error )
-                    case .successNoData:
-                        var dict = Dictionary<String,Any>()
-                        dict["total"] = numberElement
-                        if limit != 0 {
-                            dict["limit"] = limit
+            self.count(connection:connection) { data, error in
+                guard let count = data else {
+                    connection.rollback{ result in
+                        if (result.asError != nil) {
+                            Log.error(String(describing:result.asError))
                         }
-                        if offset != 0 {
-                            dict["offset"] = offset
-                        }
-                        dict["data"] = [[String: Any?]]()
-                        oncompletion(dict, nil)
-                    case .resultSet(let resultSet):
-                        var dict = Dictionary<String,Any>()
-                        
-                        dict["total"] = numberElement
-                        if limit != 0 {
-                            dict["limit"] = limit
-                        }
-                        if offset != 0 {
-                            dict["offset"] = offset
-                        }
-                        dict["data"] = resultSet.asDictionaries()
-                        oncompletion(dict,nil)
-                    default :
-                        oncompletion(nil, ErrorHandler.UnknowError)
+                        oncompletion(nil,error)
+                    }
+                    return
                 }
-                return
+                
+                let query : Select = Select(from: self.store)
+                    .limit(to: limit > 0 ? limit : count)
+                    .offset(offset)
+                
+                connection.execute(query: query){ result in
+                    guard result.success else {
+                        connection.rollback{ result in
+                            if (result.asError != nil) {
+                                Log.error(String(describing:result.asError))
+                            }
+                            oncompletion(nil,error)
+                        }
+                        return
+                    }
+                    var dict = Dictionary<String,Any>()
+                    
+                    dict["total"] = count
+                    
+                    dict["limit"] = limit > 0 ? limit : nil
+                    
+                    dict["offset"] = offset > 0 ? offset : nil
+
+                    dict["data"] = result.asResultSet?.asDictionaries() ?? [[String: Any?]]()
+
+                    connection.commit(){ result in
+                        guard result.success else {
+                            connection.rollback{ result in
+                                if (result.asError != nil) {
+                                    Log.error(String(describing:result.asError))
+                                }
+                                oncompletion(nil,error)
+                            }
+                            return
+                        }
+                        oncompletion(dict,nil)
+                    }
+                }
             }
         }
+
     }
     
     
@@ -160,6 +159,7 @@ class StoreService : Service {
                     oncompletion(nil,error)
                 case .resultSet(let resultSet):
                     do {
+                        print("resultSet \(resultSet)")
                         try oncompletion(resultSet.singleRow(),nil)
                     } catch {
                         Log.error("Malformed resulset")
@@ -255,23 +255,32 @@ class StoreService : Service {
         }
     }
     
-    private func count(connection:Connection,oncompletion: @escaping (Dictionary<String,Any>?,Error?) -> ()) {
-        let query : String = "select count(*) from stores"
-        connection.execute(query) { queryResult in
-            switch(queryResult){
-                case .error(let error):
-                    oncompletion(nil,error)
-                case .resultSet(let resultSet):
-                    do {                    
-                        try oncompletion(resultSet.singleRow(),nil)
-                    } catch {
-                        Log.error("Malformed resulset")
-                        oncompletion(nil, ErrorHandler.UnexpectedDataStructure)
+    private func count(connection:Connection,oncompletion: @escaping (Int?,Error?) -> ()) {
+        let query = Select(RawField("count(*)"), from: store)
+        connection.execute(query:query) { result in
+            switch (result) {
+            case .error(let error):
+                oncompletion(nil,error)
+            case .resultSet(let resultSet):
+                do {
+                    switch(try resultSet.singleRow()["count"]){
+                        case let result as Int64:
+                            oncompletion(Int(result),nil)
+                            break
+                        case let result as Int:
+                            oncompletion(result,nil)
+                            break
+                        default:
+                            throw ErrorHandler.UnexpectedDataStructure
                     }
-                case .success:
-                    oncompletion(nil,ErrorHandler.UnexpectedDataStructure)
-                case .successNoData:
-                    oncompletion(nil,ErrorHandler.NothingFoundFor("in table \(self.store.tableName)"))
+                } catch {
+                    Log.error("Malformed resulset")
+                    oncompletion(nil, ErrorHandler.UnexpectedDataStructure)
+                }
+            case .success:
+                oncompletion(nil,ErrorHandler.UnexpectedDataStructure)
+            case .successNoData:
+                oncompletion(nil,ErrorHandler.NothingFoundFor("in table \(self.store.tableName)"))
             }
         }
     }
