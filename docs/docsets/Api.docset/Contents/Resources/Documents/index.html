@@ -13,7 +13,7 @@
     <a title="Api  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">Api Docs</a> (42% documented)</p>
+        <p><a href="index.html">Api Docs</a> (17% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -30,7 +30,13 @@
             <a href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Classes/Product.html">Product</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/ProductRouter.html">ProductRouter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/ProductService.html">ProductService</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Reference.html">Reference</a>
@@ -39,16 +45,34 @@
                 <a href="Classes/RoutingCenter.html">RoutingCenter</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Stock.html">Stock</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/StockRouter.html">StockRouter</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/StockService.html">StockService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Store.html">Store</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/StoreRouter.html">StoreRouter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/StoreService.html">StoreService</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="Enums.html">Enums</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/ErrorHandler.html">ErrorHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/JSONSerializableError.html">JSONSerializableError</a>
+              </li>
               <li class="nav-group-task">
                 <a href="Enums/ReferenceError.html">ReferenceError</a>
               </li>
@@ -91,6 +115,9 @@
                 <a href="Extensions/Int8.html">Int8</a>
               </li>
               <li class="nav-group-task">
+                <a href="Extensions/ResultSet.html">ResultSet</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Extensions/String.html">String</a>
               </li>
             </ul>
@@ -99,7 +126,32 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Functions.html#/s:F3Api16handleCompletionFT6resultGSqGVs10DictionarySSP___5errorGSqPs5Error__8responseC6Kitura14RouterResponse4nextFT_T__T_">handleCompletion(result:error:response:next:)</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Functions.html#/s:F3Api11handleErrorFT7requestC6Kitura13RouterRequest8responseCS0_14RouterResponse4nextFT_T__T_">handleError(request:response:next:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/JSONSerializable.html">JSONSerializable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/Pivot.html">Pivot</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/Service.html">Service</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/Database.html">Database</a>
               </li>
             </ul>
           </li>
@@ -109,19 +161,19 @@
         <section>
           <section class="section">
             
-            <h2 id='a-href-overview-overview-a-a-href-doc-doc-a-a-href-cov-code-coverage-a-a-href-docker-docker-a-a-href-tasks-task-flow-a' class='heading'><a href="#Overview">Overview</a>  |  <a href="#Doc">Doc</a>  |  <a href="#Cov">Code Coverage</a>  |  <a href="#Docker">Docker</a> |  <a href="#Tasks">Task Flow</a></h2>
-
-<p><a href="#Stores">Stores</a></p>
-
-<p><a href="#Products">Products</a></p>
-
-<p><a href="#Stock">Stock</a></p>
+            <p><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"></p>
 <h1 id='a-name-overview-a-overview' class='heading'><a name="Overview"></a> Overview</h1>
+
+<p>This API as been design to be used to test Swift Kitura framework performances. </p>
+
+<p>This API is build to work with a PostgreSQL database and provide a way to interact with stores and products through an relational model.</p>
+
+<p><i class="fa fa-book" aria-hidden="true"></i></p>
+<h2 id='a-href-doc-doc-book-a-a-href-docker-docker-whale-a-a-href-cov-code-coverage-shield-a-a-href-tasks-task-flow-a' class='heading'><a href="#Doc">Doc :book:</a>  |  <a href="#Docker">Docker :whale:</a>  |   <a href="#Cov">Code Coverage :shield:</a> |  <a href="#Tasks">Task Flow 🔨</a></h2>
 <h1 id='a-name-doc-a-api-documentation' class='heading'><a name="Doc"></a> Api Documentation</h1>
 
-<p>This API as been design to be used to tests the kitura framework performances. 
-This API is made to work with a PostgreSQL Database and provide a way to interact with stores and products.</p>
-<h1 id='a-name-stores-a-stores' class='heading'><a name="Stores"></a> Stores</h1>
+<p><a href="#Stores">Stores</a> | <a href="#Products">Products</a> | <a href="#Stock">Stock</a> | <a href="#Error">Errors</a></p>
+<h2 id='a-name-stores-a-stores' class='heading'><a name="Stores"></a> Stores</h2>
 
 <p>URL        :  <code>api/v1/stores</code> |  <code>api/v1/stores/:id</code></p>
 
@@ -132,66 +184,230 @@ This API is made to work with a PostgreSQL Database and provide a way to interac
 <p>Parameters :  <code>Limit</code> and <code>Offet</code> with GET  | None</p>
 
 <p>Request body Structure : </p>
-<pre class="highlight plaintext"><code>// Store obj
-{
-   "refStore": String   //  Auto generated do not modify
-   "name": String,      //  required
-   "picture":String,    //  optional
-   "vat":Double,        //  optional
-   "currency":String,   //  optional
-   "merchantkey":String //  optional
-} 
+<pre class="highlight swift"><code><span class="c1">// Store obj</span>
+<span class="p">{</span>
+   <span class="s">"refStore"</span><span class="p">:</span> <span class="kt">String</span>   <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>        <span class="c1">//  optional</span>
+   <span class="s">"currency"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>   <span class="c1">//  optional</span>
+   <span class="s">"merchantkey"</span><span class="p">:</span><span class="kt">String</span> <span class="c1">//  optional</span>
+<span class="p">}</span> 
 </code></pre>
 
 <p>Code </p>
-<h3 id='code-200-ok' class='heading'>Code: 200 OK</h3>
+<h4 id='code-200-ok' class='heading'>Code: 200 OK</h4>
 
 <p>Content: </p>
-<pre class="highlight plaintext"><code>// Store obj
-{
-   "refStore": String   //  Auto generated do not modify
-   "name": String,      //  required
-   "picture":String,    //  optional
-   "vat":Double,        //  optional
-   "currency":String,   //  optional
-   "merchantkey":String //  optional
-} 
+<pre class="highlight swift"><code><span class="c1">// Store obj</span>
+<span class="p">{</span>
+   <span class="s">"refStore"</span><span class="p">:</span> <span class="kt">String</span>   <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>        <span class="c1">//  optional</span>
+   <span class="s">"currency"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>   <span class="c1">//  optional</span>
+   <span class="s">"merchantkey"</span><span class="p">:</span><span class="kt">String</span> <span class="c1">//  optional</span>
+<span class="p">}</span> 
 </code></pre>
 
 <p>OR</p>
-<pre class="highlight plaintext"><code>[
-   {
-      "refStore": String   //  Auto generated do not modify
-      "name": String,      //  required
-      "picture":String,    //  optional
-      "vat":Double,        //  optional
-      "currency":String,   //  optional
-      "merchantkey":String //  optional
-   },{
-      "refStore": String   //  Auto generated do not modify
-      "name": String,      //  required
-      "picture":String,    //  optional
-      "vat":Double,        //  optional
-      "currency":String,   //  optional
-      "merchantkey":String //  optional
-   }
-   ,...
-] 
+<pre class="highlight swift"><code><span class="p">[</span>
+   <span class="p">{</span>
+      <span class="s">"refStore"</span><span class="p">:</span> <span class="kt">String</span>   <span class="c1">//  Auto generated do not modify</span>
+      <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+      <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+      <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>        <span class="c1">//  optional</span>
+      <span class="s">"currency"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>   <span class="c1">//  optional</span>
+      <span class="s">"merchantkey"</span><span class="p">:</span><span class="kt">String</span> <span class="c1">//  optional</span>
+   <span class="p">},{</span>
+      <span class="s">"refStore"</span><span class="p">:</span> <span class="kt">String</span>   <span class="c1">//  Auto generated do not modify</span>
+      <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+      <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+      <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>        <span class="c1">//  optional</span>
+      <span class="s">"currency"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>   <span class="c1">//  optional</span>
+      <span class="s">"merchantkey"</span><span class="p">:</span><span class="kt">String</span> <span class="c1">//  optional</span>
+   <span class="p">}</span>
+   <span class="p">,</span><span class="o">...</span>
+<span class="p">]</span> 
 </code></pre>
-<h3 id='code-201-created' class='heading'>Code: 201 CREATED</h3>
+<h4 id='code-201-created' class='heading'>Code: 201 CREATED</h4>
 
 <p>Content: </p>
-<pre class="highlight plaintext"><code>// Store obj
-{
-   "refStore": String   //  Auto generated do not modify
-   "name": String,      //  required
-   "picture":String,    //  optional
-   "vat":Double,        //  optional
-   "currency":String,   //  optional
-   "merchantkey":String //  optional
-} 
+<pre class="highlight swift"><code><span class="c1">// Store obj</span>
+<span class="p">{</span>
+   <span class="s">"refStore"</span><span class="p">:</span> <span class="kt">String</span>   <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>        <span class="c1">//  optional</span>
+   <span class="s">"currency"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>   <span class="c1">//  optional</span>
+   <span class="s">"merchantkey"</span><span class="p">:</span><span class="kt">String</span> <span class="c1">//  optional</span>
+<span class="p">}</span> 
 </code></pre>
-<h3 id='code-400-bad-request' class='heading'>Code: 400 BAD REQUEST</h3>
+<h3 id='a-name-products-a-products' class='heading'><a name="Products"></a> Products</h3>
+
+<p>URL        :  <code>api/v1/products</code> |  <code>api/v1/products/:id</code></p>
+
+<p>Method     :  <code>GET</code>,<code>POST</code>  |  <code>DELETE</code> , <code>PATCH</code> <code>GET</code></p>
+
+<p>URL Params :      none          |   id: required</p>
+
+<p>Parameters :  <code>Limit</code> and <code>Offet</code> with GET  | None</p>
+
+<p>Request body Structure : </p>
+<pre class="highlight swift"><code><span class="c1">// Product obj</span>
+<span class="p">{</span>
+   <span class="s">"refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span> <span class="c1">//  Auto generated do not modify</span>
+<span class="p">}</span> 
+</code></pre>
+
+<p>Code </p>
+<h4 id='code-200-ok' class='heading'>Code: 200 OK</h4>
+
+<p>Content: </p>
+<pre class="highlight swift"><code><span class="c1">// Product obj</span>
+<span class="p">{</span>
+   <span class="s">"refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span> <span class="c1">//  Auto generated do not modify</span>
+<span class="p">}</span> 
+</code></pre>
+
+<p>OR</p>
+<pre class="highlight swift"><code><span class="p">[</span>
+   <span class="c1">// Product obj</span>
+<span class="p">{</span>
+   <span class="s">"refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span> <span class="c1">//  Auto generated do not modify</span>
+<span class="p">},{</span>
+   <span class="s">"refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span> <span class="c1">//  Auto generated do not modify</span>
+<span class="p">}</span> 
+   <span class="p">,</span><span class="o">...</span>
+<span class="p">]</span> 
+</code></pre>
+<h4 id='code-201-created' class='heading'>Code: 201 CREATED</h4>
+
+<p>Content: </p>
+<pre class="highlight swift"><code><span class="c1">// Product obj</span>
+<span class="p">{</span>
+   <span class="s">"refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span> <span class="c1">//  Auto generated do not modify</span>
+<span class="p">}</span> 
+</code></pre>
+<h3 id='a-name-stock-a-stock' class='heading'><a name="Stock"></a> Stock</h3>
+
+<p>URL        :  <code>api/v1/stores/:storeId/products</code> |  <code>api/v1/stores/:storeId/products/:productId</code></p>
+
+<p>Method     :  <code>GET</code>,<code>POST</code>  |  <code>DELETE</code> , <code>PATCH</code> <code>GET</code></p>
+
+<p>URL Params :      storeId: required          |   storeId:   required, productId: required</p>
+
+<p>Parameters :  <code>Limit</code> and <code>Offet</code> with GET  | None</p>
+
+<p>Request body Structure : </p>
+<pre class="highlight swift"><code><span class="c1">// Stock obj</span>
+<span class="p">{</span>
+   <span class="s">"product_refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"product_name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"product_picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"product_creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"refproduct"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"refstore"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"quantity"</span><span class="p">:</span><span class="kt">Int</span><span class="p">,</span>
+   <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"priceht"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"status"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span>
+   <span class="s">"lastupdate"</span><span class="p">:</span><span class="kt">Date</span>
+<span class="p">}</span> 
+</code></pre>
+
+<p>Code </p>
+<h4 id='code-200-ok' class='heading'>Code: 200 OK</h4>
+
+<p>Content: </p>
+<pre class="highlight swift"><code><span class="c1">// Stock obj</span>
+<span class="p">{</span>
+   <span class="s">"product_refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"product_name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"product_picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"product_creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"refproduct"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"refstore"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"quantity"</span><span class="p">:</span><span class="kt">Int</span><span class="p">,</span>
+   <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"priceht"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"status"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span>
+   <span class="s">"lastupdate"</span><span class="p">:</span><span class="kt">Date</span>
+<span class="p">}</span> 
+</code></pre>
+
+<p>OR</p>
+<pre class="highlight swift"><code><span class="p">[</span>
+   <span class="c1">// Product obj</span>
+<span class="c1">// Stock obj</span>
+<span class="p">{</span>
+   <span class="s">"product_refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"product_name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"product_picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"product_creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"refproduct"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"refstore"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"quantity"</span><span class="p">:</span><span class="kt">Int</span><span class="p">,</span>
+   <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"priceht"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"status"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span>
+   <span class="s">"lastupdate"</span><span class="p">:</span><span class="kt">Date</span>
+<span class="p">}</span> <span class="p">,{</span>
+   <span class="s">"product_refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"product_name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"product_picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"product_creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"refproduct"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"refstore"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"quantity"</span><span class="p">:</span><span class="kt">Int</span><span class="p">,</span>
+   <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"priceht"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"status"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span>
+   <span class="s">"lastupdate"</span><span class="p">:</span><span class="kt">Date</span>
+<span class="p">}</span>
+   <span class="p">,</span><span class="o">...</span>
+<span class="p">]</span> 
+</code></pre>
+<h4 id='code-201-created' class='heading'>Code: 201 CREATED</h4>
+
+<p>Content: </p>
+<pre class="highlight swift"><code><span class="c1">// Stock obj</span>
+<span class="p">{</span>
+   <span class="s">"product_refproduct"</span><span class="p">:</span> <span class="kt">String</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"product_name"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>      <span class="c1">//  required</span>
+   <span class="s">"product_picture"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>    <span class="c1">//  optional</span>
+   <span class="s">"product_creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span> <span class="c1">//  Auto generated do not modify</span>
+   <span class="s">"refproduct"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"refstore"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"quantity"</span><span class="p">:</span><span class="kt">Int</span><span class="p">,</span>
+   <span class="s">"vat"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"priceht"</span><span class="p">:</span><span class="kt">Double</span><span class="p">,</span>
+   <span class="s">"status"</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span>
+   <span class="s">"creationdate"</span><span class="p">:</span><span class="kt">Date</span><span class="p">,</span>
+   <span class="s">"lastupdate"</span><span class="p">:</span><span class="kt">Date</span>
+<span class="p">}</span>
+</code></pre>
+<h3 id='a-name-error-a-api-error' class='heading'><a name="Error"></a> API Error</h3>
+<h4 id='code-400-bad-request' class='heading'>Code: 400 BAD REQUEST</h4>
 
 <p>Example : </p>
 
@@ -200,40 +416,61 @@ This API is made to work with a PostgreSQL Database and provide a way to interac
 <li><p>[x] Missing required properties POST</p></li>
 <li><p>[x] Wrong limit or offset ( &lt; 0 )</p></li>
 </ul>
-<h3 id='code-404-not-found' class='heading'>Code: 404 NOT FOUND</h3>
+<h4 id='code-404-not-found' class='heading'>Code: 404 NOT FOUND</h4>
 
 <p>Example : Id not found in database  </p>
-<h3 id='code-500-internal-server-error' class='heading'>Code: 500 INTERNAL SERVER ERROR</h3>
-<h1 id='a-name-products-a-products' class='heading'><a name="Products"></a> Products</h1>
-<h1 id='a-name-stock-a-stock' class='heading'><a name="Stock"></a> Stock</h1>
+<h4 id='code-500-internal-server-error' class='heading'>Code: 500 INTERNAL SERVER ERROR</h4>
 <h1 id='a-name-docker-a-work-with-docker' class='heading'><a name="Docker"></a> Work with Docker</h1>
+<h4 id='required-images' class='heading'>Required images :</h4>
+<pre class="highlight shell"><code><span class="gp">$ </span>docker pull postgres
+</code></pre>
+<pre class="highlight shell"><code><span class="gp">$ </span>docker pull swift
+</code></pre>
+<h4 id='launch-database-container' class='heading'>Launch database container :</h4>
 
-<p>first download required images :</p>
+<p>Run a docker container that contains a postgres database. With environnement variable you can specify the name of db, a username and a password</p>
+<pre class="highlight shell"><code><span class="gp">$ </span>docker run --name <span class="k">*</span>name<span class="k">*</span> -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span><span class="k">*</span><span class="nb">pwd</span><span class="k">*</span> -e <span class="nv">POSTGRES_USER</span><span class="o">=</span><span class="k">*</span>userName<span class="k">*</span> -e <span class="nv">POSTGRES_DB</span><span class="o">=</span><span class="k">*</span>dbName<span class="k">*</span> -d postgres
+</code></pre>
+<h4 id='build-image' class='heading'>Build image :</h4>
 
-<p><code>docker pull postgres</code></p>
+<p>Please first go in the Dockerfile and update these lines to match your database container :</p>
+<pre class="highlight plaintext"><code>ENV DATABASE_HOST=*host*  #provide your host name ( you can retrieve via docker inspect )
+ENV DATABASE_PORT=*port*  #provide your host port ( postgres work often with 5432 )
+ENV DATABASE_DB=*db name*
+ENV DATABASE_USER=*user name*
+ENV DATABASE_PASSWORD=*database password*
+</code></pre>
 
-<p><code>docker pull swift</code></p>
+<p>Then lauch this command inside the project folder. If you want to set it  :</p>
+<pre class="highlight shell"><code><span class="gp">$ </span>docker build -t <span class="k">*</span>name<span class="k">*</span> . 
+</code></pre>
+
+<p><em>name</em> correspond au nom que vous voulez donner à l&#39;image</p>
+<h4 id='launch-kitura-container' class='heading'>Launch kitura container :</h4>
+<pre class="highlight shell"><code><span class="gp">$ </span>docker run -it --rm --link <span class="k">*</span>databaseContainerName<span class="k">*</span>:database -p 8080:8080 -v <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>:<span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span> -w <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span> <span class="k">*</span>name<span class="k">*</span>
+</code></pre>
 <h1 id='a-name-cov-a-code-coverage' class='heading'><a name="Cov"></a> Code Coverage</h1>
 
 <p><em>Coming Soon</em> </p>
 <h1 id='a-name-tasks-a-task-flow' class='heading'><a name="Tasks"></a> Task Flow</h1>
 
 <ul>
-<li>[x] database connection</li>
+<li>[x] Database connection</li>
 <li>[x] Stores routes</li>
 <li>[x] Products routes</li>
 <li>[x] Stock routes</li>
-<li>[ ] Docker</li>
-<li>[ ] Linux compatibility</li>
-<li>[ ] API docs</li>
+<li>[x] Docker</li>
+<li>[x] Linux compatibility</li>
+<li>[x] API docs</li>
 <li>[ ] Unit tests</li>
 <li>[ ] CI</li>
+<li>[ ] Code Cov</li>
 </ul>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external">LoiKos</a>. All rights reserved. (Last updated: 2017-08-09)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external">LoiKos</a>. All rights reserved. (Last updated: 2017-09-01)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

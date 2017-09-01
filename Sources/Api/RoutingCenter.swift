@@ -15,6 +15,14 @@ final public class RoutingCenter {
     private let pool : ConnectionPool
     private let router : Router
     
+    /**
+     
+    Initialise router and connection to database
+     - Throws: QueryError
+     - Author: Loic LE PENN
+     - Version: 1.0
+     
+     */
     public init() throws {
         let database = try Database()
         self.pool = database.pool
@@ -22,6 +30,14 @@ final public class RoutingCenter {
         self.router = Router()
     }
     
+    /**
+     
+     Setup all Subrouter and Service
+     - Returns: Router
+     - Author: Loic LE PENN
+     - Version: 1.0
+     
+     */
     public func setup() -> Router {
         router.all("*", middleware: BodyParser()) // Parse incoming request body
         
