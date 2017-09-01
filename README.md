@@ -325,7 +325,7 @@ $ docker build -t *name* .
 
 *name* correspond au nom que vous voulez donner à l'image
 
-#### Launch perfect container : 
+#### Launch kitura container : 
 
 ```shell
 $ docker run -it --rm --link *databaseContainerName*:database -p 8080:8080 -v `pwd`:`pwd` -w `pwd` *name*
