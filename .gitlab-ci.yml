@@ -42,8 +42,7 @@ test_api:
 pages:
   stage: deploy
   script:
-    - mkdir public
-    - cp -rp docs public
+    - cp -r docs public
   artifacts:
     paths:
     - public
