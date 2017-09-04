@@ -42,8 +42,7 @@ test_api:
 pages:
   stage: deploy
   script:
-    - mkdir public
-    - cp -r docs public
+    - echo "Nothing to do"
   artifacts:
     paths:
     - docs
