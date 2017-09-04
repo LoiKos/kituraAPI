@@ -95,7 +95,7 @@ class DatabaseTests: XCTestCase {
         }
     }
 
-    func testPerformanceExample() {
+    func testPerformancePreparation() {
         self.measure {
             guard let _ = try? Database().preparation() else {
                 XCTFail("error during preparations test ")
@@ -104,4 +104,16 @@ class DatabaseTests: XCTestCase {
         }
         testRemove()
     }
+    
+    static var allTests : [(String, (ReferenceTests) -> () throws -> Void)] {
+        return [
+            ("testConnectivity", testConnectivity),
+            ("testPreparations", testPreparations),
+            ("testRemoveNoConnection", testRemoveNoConnection),
+            ("testRemoveStockAlreadyDrop", testRemoveStockAlreadyDrop),
+            ("testRemove", testRemove),
+            ("testPerformancePreparation", testPerformancePreparation)
+        ]
+    }
+
 }

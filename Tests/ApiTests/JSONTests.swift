@@ -125,4 +125,25 @@ class JSONTests: XCTestCase {
             }
         }
     }
+    
+    static var allTests : [(String, (ReferenceTests) -> () throws -> Void)] {
+        return [
+            ("testString", testString),
+            ("testDate", testDate),
+            ("testInt", testInt),
+            ("testInt8", testInt8),
+            ("testInt16", testInt16),
+            ("testInt32", testInt32),
+            ("testInt64", testInt64),
+            ("testFloat32", testFloat32),
+            ("testFloat64", testFloat64),
+            ("testFloat80", testFloat80),
+            ("testArray", testArray),
+            ("testArrayFailed", testArrayFailed),
+            ("testJsonArrayPerformances", testJsonArrayPerformances),
+            ("testDictionnary", testDictionnary),
+            ("testDictionnaryFailed", testDictionnaryFailed),
+            ("testJsonDictionaryPerformances", testJsonDictionaryPerformances)
+        ]
+    }
 }

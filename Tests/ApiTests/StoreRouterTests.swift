@@ -23,7 +23,7 @@ class StoreRouterTests : KituraTest {
         let jsonToTest = JSON(["name": "Nike"])
         
         self.performServerTest(router) { expectation in
-            self.performRequest("post", path: "/api/v1/stores", callback: { response in
+            self.performRequest("POST", path: "/api/v1/stores", callback: { response in
                 guard let response = response else {
                     XCTFail("ClientRequest response object was nil")
                     expectation.fulfill()
