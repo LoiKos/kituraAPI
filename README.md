@@ -314,20 +314,18 @@ $ docker run --name *name* -e POSTGRES_PASSWORD=*pwd* -e POSTGRES_USER=*userName
 ```
 #### Build image : 
 
-   Please first go in the Dockerfile and update these lines to match your database container :
-
-```Dockerfile
-ENV DATABASE_HOST=*host*  #provide your host name ( you can retrieve via docker inspect )
-ENV DATABASE_PORT=*port*  #provide your host port ( postgres work often with 5432 )
-ENV DATABASE_DB=*db name*
-ENV DATABASE_USER=*user name*
-ENV DATABASE_PASSWORD=*database password*
 ```
-   Then lauch this command inside the project folder. If you want to set it  :
+Then lauch this command inside the project folder. If you want to set it  :
 
 ```shell 
 $ docker build -t *name* . 
 ```
+
+if your working behind a proxy you need to set proxy with '--build-arg' : 
+```shell 
+$ docker build --build-arg http_proxy=*yourproxy* --build-arg https-proxy=*yourhttpsproxy* -t *name* . 
+```
+please be careful about http_proxy and HTTP_PROXY you can have some issues if your not using it correctly. For example apt-get works fine with http_proxy but not with HTTP_PROXY
 
 *name* correspond au nom que vous voulez donner à l'image
 
@@ -337,9 +335,23 @@ $ docker build -t *name* .
 $ docker run -it --rm --link *databaseContainerName*:database -p 8080:8080 -v `pwd`:`pwd` -w `pwd` *name*
 ```
 
+if your application recover database settings through environnement variable please use -e options with run commands : 
+
+```shell
+$ docker run -it --rm --link *databaseContainerName*:database -e DATABASE_USER=USER -p 8080:8080 -v `pwd`:`pwd` -w `pwd` *name*
+```
+you can also modify the 'Dockerfile' and add some lines to provide directly the ENV variables **(NOT RECOMMENDED)** :
+
+```Dockerfile
+# this is an example you have to make it match your application and database settings
+ENV DATABASE_USER=USER
+ENV DATABASE_DB=storeDB
+ENV DATABASE_HOST=...
+```
+
 # <a name="Cov"></a> Code Coverage
 
-*Coming Soon* 
+*Coming* 
 
 # <a name="Tasks"></a> Task Flow
 - [x] Database connection
