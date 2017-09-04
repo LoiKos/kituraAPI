@@ -12,6 +12,8 @@ This API is build to work with a PostgreSQL database and provide a way to intera
 
 # <a name="Doc"></a> Api Documentation
 
+ [Stores](#Stores) | [Products](#Products) | [Stock](#Stock) | [Errors](#Error)
+
 ## Jazzy docs 
 
 Generate Jazzy docs under macOS : 
@@ -22,8 +24,6 @@ you can also pass some options see the official documentation [Jazzy](https://gi
 
 access online docs : [Docs](http://swift-server-performances.pages.forge.orange-labs.fr/KituraAPI)
 
-
- [Stores](#Stores) | [Products](#Products) | [Stock](#Stock) | [Errors](#Error)
 
 ## <a name="Stores"></a> Stores
 
