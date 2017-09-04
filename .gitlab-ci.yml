@@ -1,7 +1,8 @@
 stages:
+  - deploy
   - build
   - test
-  - deploy
+
 
 build_api:
     stage: build
@@ -41,7 +42,8 @@ test_api:
 pages:
   stage: deploy
   script:
-  - echo 'Nothing to do...'
+  - mkdir public
+  - cp -r docs public
   artifacts:
     paths:
     - docs
