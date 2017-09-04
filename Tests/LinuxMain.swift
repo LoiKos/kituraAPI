@@ -1,6 +1,7 @@
 #if os(Linux)
     
     import XCTest
+    @testable import Api
     @testable import ApiTests
     
     var tests = [XCTestCaseEntry]()
