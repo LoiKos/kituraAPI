@@ -12,11 +12,16 @@ This API is build to work with a PostgreSQL database and provide a way to intera
 
 # <a name="Doc"></a> Api Documentation
 
-Jazzy docs => inside docs folder 
+## Jazzy docs 
 
-regenerate Jazzy docs : 
+Generate Jazzy docs under macOS : 
 
 run ` jazzy ` and `.jazzy.yaml` will do the rest 
+
+you can also pass some options see the official documentation [Jazzy](https://github.com/realm/jazzy)
+
+access online docs : [Docs](http://swift-server-performances.pages.forge.orange-labs.fr/KituraAPI)
+
 
  [Stores](#Stores) | [Products](#Products) | [Stock](#Stock) | [Errors](#Error)
 
