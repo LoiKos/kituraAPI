@@ -49,3 +49,5 @@ pages:
     - docs
   only:
   - master
+  tags:
+  - shared
