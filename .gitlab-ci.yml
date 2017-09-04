@@ -1,9 +1,15 @@
-before_script:
+stages:
+  - build
+  - test
 
 build:
+    stage: build
+    image: registry.forge.orange-labs.fr/swift-server-performances/kituraapi
     script:
         - swift build -c release
-        
-test:
-    script:
-        - swift test -c release
+    only: 
+        - master
+    tags:
+        - docker
+        - shared
+        - forge
