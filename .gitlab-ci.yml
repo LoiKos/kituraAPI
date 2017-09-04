@@ -2,11 +2,34 @@ stages:
   - build
   - test
 
-build:
+build_api:
     stage: build
     image: registry.forge.orange-labs.fr/swift-server-performances/kituraapi
     script:
         - swift build -c release
+    only: 
+        - master
+    tags:
+        - docker
+        - shared
+        - forge
+        
+test_api:
+    stage: test
+    image: registry.forge.orange-labs.fr/swift-server-performances/kituraapi
+    services:
+        - postgres:latest
+    variables:
+        POSTGRES_DB: test
+        POSTGRES_USER: Supervisor
+        POSTGRES_PASSWORD: perform
+        DATABASE_DB: test
+        DATABASE_PORT: 5432
+        DATABASE_USER: Supervisor
+        DATABASE_PASSWORD: perform
+        DATABASE_HOST: postgres
+    script:
+        - swift test -c release
     only: 
         - master
     tags:
