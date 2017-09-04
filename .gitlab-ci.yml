@@ -42,10 +42,10 @@ test_api:
 pages:
   stage: deploy
   script:
-    - echo "Nothing to do"
+    - cp -rp docs public
   artifacts:
     paths:
-    - docs
+    - public
   only:
     - master
   tags:
