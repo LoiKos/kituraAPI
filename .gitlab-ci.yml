@@ -36,3 +36,13 @@ test_api:
         - docker
         - shared
         - forge
+        
+pages:
+  stage: deploy
+  script:
+  - echo 'Nothing to do...'
+  artifacts:
+    paths:
+    - docs
+  only:
+  - master
