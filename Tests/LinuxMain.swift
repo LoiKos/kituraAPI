@@ -1,14 +1,9 @@
-#if os(Linux)
-    
-    import XCTest
-    @testable import Api
-    @testable import ApiTests
-    
-    var tests = [XCTestCaseEntry]()
-    
-    tests += DatabaseTests.allTests()
-    tests += JSONTests.allTests()
-    tests += ReferenceTests.allTests()
-    
-    XCTMain([tests])
-#endif
+import XCTest
+@testable import Api
+@testable import ApiTests
+
+XCTMain([
+    testCase(DatabaseTests.allTests),
+    testCase(JSONTests.allTests),
+    testCase(ReferenceTests.allTests)
+])

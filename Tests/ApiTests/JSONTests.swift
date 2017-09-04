@@ -15,17 +15,17 @@ class JSONTests: XCTestCase {
         let test = "Hello"
         XCTAssert(test.toJSON() == "\"Hello\"")
     }
-    
+
     func testDate() {
         let test = Date()
         XCTAssert(test.toJSON() == "\"\(test.description)\"")
     }
-    
+
     func testInt() {
         let test = 10
         XCTAssert(test.toJSON() == "10")
     }
-    
+
     func testInt8(){
         let test = Int8(exactly: 10)
         XCTAssertNotNil(test)
@@ -46,7 +46,7 @@ class JSONTests: XCTestCase {
         XCTAssertNotNil(test)
         XCTAssert(test?.toJSON() == "10")
     }
-    
+
     func testFloat32(){
         let float = Float32(floatLiteral: 10.99)
         XCTAssertNotNil(float)
@@ -62,7 +62,7 @@ class JSONTests: XCTestCase {
         XCTAssertNotNil(float)
         XCTAssert(float.toJSON() == "10.99")
     }
-    
+
     func testArray(){
         let date = Date()
         let array : [Any] = ["toto",10,10.99,date]
@@ -76,11 +76,11 @@ class JSONTests: XCTestCase {
             XCTAssert(error as? JSONSerializableError == JSONSerializableError.typeUnSerializable)
         }
     }
-    
+
     func testJsonArrayPerformances(){
         let date = Date()
         let array : [Any] = ["toto", 10, 10.99, date]
-        
+
         self.measure {
             do {
                 for _ in 0...1000 {
@@ -91,7 +91,7 @@ class JSONTests: XCTestCase {
             }
         }
     }
-    
+
     func testDictionnary(){
         let date = Date()
         let dict = ["string":"toto","number":10,"float":10.0,"date":date,"array":["test"]] as [String : Any]
@@ -101,7 +101,7 @@ class JSONTests: XCTestCase {
         XCTAssertNoThrow(XCTAssert(try dict.toJSON().contains("\"date\":\"\(date)\"")))
         XCTAssertNoThrow(XCTAssert(try dict.toJSON().contains("\"array\":[\"test\"]")))
     }
-    
+
     func testDictionnaryFailed(){
         let tuple : (String,Date) = ("toto",Date())
         let dict = ["string":"toto","number":10,"float":10.0,"UnserializeType":tuple] as [String : Any]
@@ -110,11 +110,11 @@ class JSONTests: XCTestCase {
             XCTAssert(error as? JSONSerializableError == JSONSerializableError.typeUnSerializable)
         }
     }
-    
+
     func testJsonDictionaryPerformances(){
         let date = Date()
         let dict = ["string":"toto","number":10,"float":10.0,"date":date,"array":["test"]] as [String : Any]
-        
+
         self.measure {
             for _ in 0...1000{
                 do {
@@ -125,8 +125,8 @@ class JSONTests: XCTestCase {
             }
         }
     }
-    
-    static var allTests : [(String, (ReferenceTests) -> () throws -> Void)] {
+
+    static var allTests : [(String, (JSONTests) -> () throws -> Void)] {
         return [
             ("testString", testString),
             ("testDate", testDate),
